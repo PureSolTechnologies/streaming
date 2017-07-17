@@ -10,8 +10,9 @@ import java.util.NoSuchElementException;
  * @author Rick-Rainer Ludwig
  *
  * @param <T>
+ *            is the element type of the iterator.
  */
-public abstract class AbstractIterator<T> implements Iterator<T> {
+public abstract class AbstractIterator<T> implements Iterator<T>, PeekingIterator<T> {
 
     private T next = null;
 
@@ -43,10 +44,12 @@ public abstract class AbstractIterator<T> implements Iterator<T> {
 	return result;
     }
 
+    @Override
     public final T peek() {
 	if (!hasNext()) {
 	    throw new NoSuchElementException("No more elements in this iterator.");
 	}
 	return next;
     }
+
 }

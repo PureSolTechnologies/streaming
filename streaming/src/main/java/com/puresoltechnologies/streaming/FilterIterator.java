@@ -9,6 +9,7 @@ import java.util.Iterator;
  * @author Rick-Rainer Ludwig
  *
  * @param <T>
+ *            is the element type of the iterator.
  */
 public class FilterIterator<T> extends AbstractIterator<T> {
 
@@ -18,6 +19,7 @@ public class FilterIterator<T> extends AbstractIterator<T> {
      * @author Rick-Rainer Ludwig
      *
      * @param <T>
+     *            is the element type of the iterator.
      */
     public static interface Filter<T> {
 
@@ -25,7 +27,7 @@ public class FilterIterator<T> extends AbstractIterator<T> {
 	 * Tests whether a certain element is valid and should be present in
 	 * final iterator.
 	 * 
-	 * @param ierator
+	 * @param iterator
 	 *            is the iterator where the element was taken from. It can
 	 *            be used to skip more elements if the filters needs to use
 	 *            filter multiple elements.

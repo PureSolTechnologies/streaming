@@ -9,6 +9,7 @@ import java.util.Iterator;
  * @author Rick-Rainer Ludwig
  *
  * @param <T>
+ *            is the element type of the iterator.
  */
 public interface PeekingIterator<T> extends Iterator<T> {
 
@@ -22,9 +23,4 @@ public interface PeekingIterator<T> extends Iterator<T> {
      */
     public T peek();
 
-    /**
-     * This method is doing the same like {@link #next()} while dropping the
-     * result.
-     */
-    public void skip();
 }

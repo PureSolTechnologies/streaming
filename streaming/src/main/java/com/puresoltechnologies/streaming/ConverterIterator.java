@@ -9,7 +9,9 @@ import java.util.Iterator;
  * @author Rick-Rainer Ludwig
  *
  * @param <T>
+ *            is the element type of the base iterator.
  * @param <F>
+ *            is the element type of this iterator.
  */
 public class ConverterIterator<T, F> extends AbstractIterator<F> {
 
@@ -28,14 +30,14 @@ public class ConverterIterator<T, F> extends AbstractIterator<F> {
 	/**
 	 * Converts the next element of the iterator from T to F.
 	 * 
-	 * @param ierator
+	 * @param iterator
 	 *            is the iterator where the element was taken from. It can
 	 *            be used to read and skip more elements if the conversion
 	 *            needs to use multiple elements.
 	 * @param element
 	 *            is the current element of the iterator which was retrieved
 	 *            already.
-	 * @return
+	 * @return A new element of type F is returned.
 	 */
 	F convert(Iterator<T> iterator, T element);
 

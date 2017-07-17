@@ -5,6 +5,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This composite iterators take multiple iterators and handles them as one
+ * whole to the outside.
+ * 
+ * @author Rick-Rainer Ludwig
+ *
+ * @param <T>
+ *            is the element type of the iterator.
+ */
 public class CompositeIterator<T> extends AbstractIterator<T> {
 
     private final List<Iterator<T>> iterators = new ArrayList<Iterator<T>>();
