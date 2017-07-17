@@ -22,15 +22,12 @@ public class CompositeIterator<T> extends AbstractIterator<T> {
 
     @Override
     protected T findNext() {
-	if (currentIterator == null) {
+	while ((currentIterator == null) || (!currentIterator.hasNext())) {
 	    if (iterators.size() == 0) {
+		currentIterator = null;
 		return null;
 	    }
 	    currentIterator = iterators.remove(0);
-	}
-	if (!currentIterator.hasNext()) {
-	    currentIterator = null;
-	    return null;
 	}
 	return currentIterator.next();
     }
