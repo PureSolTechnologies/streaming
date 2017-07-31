@@ -10,14 +10,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.streaming.FilterIterator.Filter;
+import com.puresoltechnologies.streaming.FilteringStreamIterator.Filter;
 
-public class FilterIteratorTest {
+public class FilteringStreamIteratorTest {
 
     @Test
     public void simpleFiltering() {
 	List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	FilterIterator<Integer> filterIterator = new FilterIterator<Integer>(numbers.iterator(), new Filter<Integer>() {
+	FilteringStreamIterator<Integer> filterIterator = new FilteringStreamIterator<Integer>(numbers.iterator(), new Filter<Integer>() {
 	    @Override
 	    public boolean valid(Iterator<Integer> ierator, Integer element) {
 		return element % 2 == 0;

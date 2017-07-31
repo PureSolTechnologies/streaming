@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class CompositeIteratorTest {
+public class CompositeStreamIteratorTest {
 
     @Test
     public void testSimpleConversion() {
@@ -18,7 +18,7 @@ public class CompositeIteratorTest {
 	List<Integer> numbers2 = Arrays.asList(3);
 	List<Integer> numbers3 = Arrays.asList(4, 5);
 	@SuppressWarnings("unchecked")
-	CompositeIterator<Integer> converterIterator = new CompositeIterator<Integer>(numbers.iterator(),
+	CompositeStreamIterator<Integer> converterIterator = new CompositeStreamIterator<Integer>(numbers.iterator(),
 		numbers2.iterator(), numbers3.iterator());
 	assertTrue(converterIterator.hasNext());
 	assertEquals(1, (int) converterIterator.next());
@@ -36,7 +36,7 @@ public class CompositeIteratorTest {
     @Test
     public void testEmptyConstructor() {
 	@SuppressWarnings("unchecked")
-	CompositeIterator<Integer> converterIterator = new CompositeIterator<Integer>();
+	CompositeStreamIterator<Integer> converterIterator = new CompositeStreamIterator<Integer>();
 	assertFalse(converterIterator.hasNext());
     }
 
@@ -45,7 +45,7 @@ public class CompositeIteratorTest {
 	List<Integer> numbers = new ArrayList<Integer>();
 	List<Integer> numbers2 = new ArrayList<Integer>();
 	@SuppressWarnings("unchecked")
-	CompositeIterator<Integer> converterIterator = new CompositeIterator<Integer>(numbers.iterator(),
+	CompositeStreamIterator<Integer> converterIterator = new CompositeStreamIterator<Integer>(numbers.iterator(),
 		numbers2.iterator());
 	assertFalse(converterIterator.hasNext());
     }

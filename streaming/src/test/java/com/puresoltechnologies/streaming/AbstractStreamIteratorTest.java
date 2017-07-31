@@ -10,14 +10,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class AbstractIteratorTest {
+public class AbstractStreamIteratorTest {
 
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testSimple() {
-	PeekingIterator<Integer> iterator = new AbstractIterator<Integer>() {
+	StreamIterator<Integer> iterator = new AbstractStreamIterator<Integer>() {
 
 	    private int i = 0;
 
@@ -45,7 +45,7 @@ public class AbstractIteratorTest {
     @Test
     public void testNoSuchElementExceptionForNext() {
 	expectedException.expect(NoSuchElementException.class);
-	PeekingIterator<Integer> iterator = new AbstractIterator<Integer>() {
+	StreamIterator<Integer> iterator = new AbstractStreamIterator<Integer>() {
 	    @Override
 	    protected Integer findNext() {
 		return null;
@@ -58,7 +58,7 @@ public class AbstractIteratorTest {
     @Test
     public void testNoSuchElementExceptionForPeek() {
 	expectedException.expect(NoSuchElementException.class);
-	PeekingIterator<Integer> iterator = new AbstractIterator<Integer>() {
+	StreamIterator<Integer> iterator = new AbstractStreamIterator<Integer>() {
 	    @Override
 	    protected Integer findNext() {
 		return null;

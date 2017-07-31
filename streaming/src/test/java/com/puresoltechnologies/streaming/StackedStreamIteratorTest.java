@@ -11,20 +11,20 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.streaming.ConverterIterator.Converter;
-import com.puresoltechnologies.streaming.StackedIterator.Creator;
+import com.puresoltechnologies.streaming.ConvertingStreamIterator.Converter;
+import com.puresoltechnologies.streaming.StackedStreamIterator.Creator;
 
-public class StackedIteratorTest {
+public class StackedStreamIteratorTest {
 
     @Test
     public void test() {
 	List<File> directories = Arrays.asList(new File("dir1"), new File("dir2"), new File("dir3"));
 	final List<String> files = Arrays.asList("file1", "file2", "file3");
-	StackedIterator<File, File> stackedIterator = new StackedIterator<File, File>(directories.iterator(),
+	StackedStreamIterator<File, File> stackedIterator = new StackedStreamIterator<File, File>(directories.iterator(),
 		new Creator<File, File>() {
 		    @Override
 		    public Iterator<File> create(Iterator<File> ierator, final File directory) {
-			return new ConverterIterator<String, File>(files.iterator(), new Converter<String, File>() {
+			return new ConvertingStreamIterator<String, File>(files.iterator(), new Converter<String, File>() {
 
 			    @Override
 			    public File convert(Iterator<String> iterator, String file) {

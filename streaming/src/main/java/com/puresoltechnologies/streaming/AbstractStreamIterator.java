@@ -12,17 +12,17 @@ import java.util.NoSuchElementException;
  * @param <T>
  *            is the element type of the iterator.
  */
-public abstract class AbstractIterator<T> implements Iterator<T>, PeekingIterator<T> {
+public abstract class AbstractStreamIterator<T> implements StreamIterator<T> {
 
     private T next = null;
 
     /**
-     * This method looks for the next entry to be returned. If no further entry
-     * is found, <code>null</code> is returned.
+     * This method looks for the next entry to be returned. If no further entry is
+     * found, <code>null</code> is returned.
      * 
-     * @return An object of T is returned representing the next entry to be
-     *         returned by the iterator. <code>null</code> is returned in case
-     *         no more entries are available.
+     * @return An object of T is returned representing the next entry to be returned
+     *         by the iterator. <code>null</code> is returned in case no more
+     *         entries are available.
      */
     protected abstract T findNext();
 

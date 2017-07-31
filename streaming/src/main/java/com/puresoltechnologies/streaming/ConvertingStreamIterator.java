@@ -1,6 +1,7 @@
 package com.puresoltechnologies.streaming;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * This is a special decorator for {@link Iterator} to convert the iterator
@@ -13,10 +14,10 @@ import java.util.Iterator;
  * @param <F>
  *            is the element type of this iterator.
  */
-public class ConverterIterator<T, F> extends AbstractIterator<F> {
+public class ConvertingStreamIterator<T, F> extends AbstractStreamIterator<F> {
 
     /**
-     * This is the converter interface for {@link ConverterIterator}.
+     * This is the converter interface for {@link ConvertingStreamIterator}.
      * 
      * @author Rick-Rainer Ludwig
      *
@@ -31,9 +32,9 @@ public class ConverterIterator<T, F> extends AbstractIterator<F> {
 	 * Converts the next element of the iterator from T to F.
 	 * 
 	 * @param iterator
-	 *            is the iterator where the element was taken from. It can
-	 *            be used to read and skip more elements if the conversion
-	 *            needs to use multiple elements.
+	 *            is the iterator where the element was taken from. It can be used
+	 *            to read and skip more elements if the conversion needs to use
+	 *            multiple elements.
 	 * @param element
 	 *            is the current element of the iterator which was retrieved
 	 *            already.
@@ -46,8 +47,9 @@ public class ConverterIterator<T, F> extends AbstractIterator<F> {
     private final Iterator<T> origin;
     private final Converter<T, F> converter;
 
-    public ConverterIterator(Iterator<T> origin, Converter<T, F> converter) {
-	super();
+    public ConvertingStreamIterator(Iterator<T> origin, Converter<T, F> converter) {
+	Objects.requireNonNull(origin, "Origin iterator must not be null");
+	Objects.requireNonNull(converter, "Converter must not be null");
 	this.origin = origin;
 	this.converter = converter;
     }

@@ -1,6 +1,7 @@
 package com.puresoltechnologies.streaming;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * This decorator is used to stack multiple iterators, like iterating over
@@ -13,7 +14,7 @@ import java.util.Iterator;
  * @param <F>
  *            is the type of this iterator.
  */
-public class StackedIterator<T, F> extends AbstractIterator<F> {
+public class StackedStreamIterator<T, F> extends AbstractStreamIterator<F> {
 
     /**
      * This interface is used to create a new sub iterator.
@@ -31,11 +32,11 @@ public class StackedIterator<T, F> extends AbstractIterator<F> {
 	 * This method creates a new iterator out of the element.
 	 * 
 	 * @param iterator
-	 *            is the original iterator. It can be used to skip elements
-	 *            if needed.
+	 *            is the original iterator. It can be used to skip elements if
+	 *            needed.
 	 * @param element
-	 *            is the element take off the iterator of which the new
-	 *            iterator is to be created.
+	 *            is the element take off the iterator of which the new iterator is
+	 *            to be created.
 	 * @return A new {@link Iterator} of type F is returned.
 	 */
 	Iterator<F> create(Iterator<T> iterator, T element);
@@ -46,7 +47,9 @@ public class StackedIterator<T, F> extends AbstractIterator<F> {
     private final Creator<T, F> creator;
     private Iterator<F> currentIterator = null;
 
-    public StackedIterator(Iterator<T> origin, Creator<T, F> creator) {
+    public StackedStreamIterator(Iterator<T> origin, Creator<T, F> creator) {
+	Objects.requireNonNull(origin, "Origin iterator must not be null");
+	Objects.requireNonNull(creator, "Creator must not be null");
 	this.origin = origin;
 	this.creator = creator;
     }

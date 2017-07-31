@@ -10,14 +10,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.streaming.ConverterIterator.Converter;
+import com.puresoltechnologies.streaming.ConvertingStreamIterator.Converter;
 
-public class ConverterIteratorTest {
+public class ConvertingStreamIteratorTest {
 
     @Test
     public void testSimpleConversion() {
 	List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
-	ConverterIterator<Integer, String> converterIterator = new ConverterIterator<Integer, String>(
+	ConvertingStreamIterator<Integer, String> converterIterator = new ConvertingStreamIterator<Integer, String>(
 		numbers.iterator(), new Converter<Integer, String>() {
 
 		    @Override
