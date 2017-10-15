@@ -5,6 +5,8 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.streaming.CountingStreamIterator;
+
 public class CSVReaderTest {
 
     @Test
@@ -13,7 +15,9 @@ public class CSVReaderTest {
 	    CSVReader reader = new CSVReader(inputStream, true);
 	    CSVHeader header = reader.getHeader();
 	    System.out.println(header);
-	    reader.forEachRemaining((record) -> System.out.println(record));
+	    CountingStreamIterator<CSVRecord> countingStreamIterator = new CountingStreamIterator<>(reader);
+	    countingStreamIterator.forEachRemaining(
+		    (record) -> System.out.println(countingStreamIterator.getCount() + ": " + record));
 	}
     }
 

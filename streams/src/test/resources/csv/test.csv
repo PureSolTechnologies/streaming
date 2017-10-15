@@ -1,2 +1,6 @@
 Name,Date of Birth,Street,ZIP,Country,Comment
-Rick,1990-10-10,Street 1, 12345,Germany,Comment
+SampleName,1980-01-02,Street 1, 12345,Germany,Comment
+SampleName2,1981-03-04,Street 2, 23456,Austria,"This
+is a ""multiline"" comment"
+"Multiline
+Name",1982-05-06,Street 3, 34567,Switzerland,"Simple comment with ""quotes"""

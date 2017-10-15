@@ -3,7 +3,6 @@ package com.puresoltechnologies.streaming.streams.csv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 
 import com.puresoltechnologies.streaming.streams.InputStreamIterator.InputStreamPartReader;
 
@@ -17,31 +16,43 @@ public class CSVRecordReader implements InputStreamPartReader<InputStream, CSVRe
     @Override
     public CSVRecord readPart(InputStream inputStream) {
 	try {
+	    String line = readLine(inputStream);
+	    if (line == null) {
+		return null;
+	    }
 	    CSVRecord record = new CSVRecord();
-	    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-	    int c = inputStream.read();
-	    while (c != -1) {
-		if (c == ',') {
-		    record.addField(byteArrayOutputStream.toString(Charset.defaultCharset().name()));
-		    byteArrayOutputStream = new ByteArrayOutputStream();
-		} else if ((c == '\n') || (c == '\r')) {
-		    if ((byteArrayOutputStream.size() > 0) || (record.getFieldCount() > 0)) {
-			record.addField(byteArrayOutputStream.toString(Charset.defaultCharset().name()));
-			return record;
-		    }
-		} else {
-		    byteArrayOutputStream.write(c);
-		}
-		c = inputStream.read();
+	    String[] fields = line.split(",");
+	    for (int fieldId = 0; fieldId < fields.length; ++fieldId) {
+		record.addField(fields[fieldId]);
 	    }
-	    if ((byteArrayOutputStream.size() > 0) || (record.getFieldCount() > 0)) {
-		record.addField(byteArrayOutputStream.toString(Charset.defaultCharset().name()));
-		return record;
-	    }
-	    return null;
+	    return record;
 	} catch (IOException e) {
 	    return null;
 	}
+    }
+
+    private String readLine(InputStream inputStreamReader) throws IOException {
+	ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+	int quoteCount = 0;
+	while (true) {
+	    int c = inputStreamReader.read();
+	    if (c == -1) {
+		return null;
+	    }
+	    if ((c == '\n') || (c == '\r')) {
+		if ((byteArrayOutputStream.size() == 0)) {
+		    continue;
+		}
+		if (quoteCount % 2 == 0) {
+		    break;
+		}
+	    }
+	    byteArrayOutputStream.write(c);
+	    if (c == '"') {
+		++quoteCount;
+	    }
+	}
+	return byteArrayOutputStream.toString();
     }
 
 }
