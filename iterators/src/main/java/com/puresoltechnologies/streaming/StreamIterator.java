@@ -30,7 +30,7 @@ public interface StreamIterator<T> extends Iterator<T> {
 	return new AbstractStreamIterator<T>() {
 	    @Override
 	    protected T findNext() {
-		if (iterator.hasNext()) {
+		while (iterator.hasNext()) {
 		    T next = iterator.next();
 		    if (next != null) {
 			return next;
