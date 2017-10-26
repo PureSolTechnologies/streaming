@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams;
+package com.puresoltechnologies.streaming.streams.binary;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -94,14 +94,28 @@ public abstract class BinaryOutputStream extends OutputStream {
      * 
      * @param signedInt
      */
-    public abstract void readSignedInt(int signedInt) throws IOException;
+    public abstract void writeSignedInt(int signedInt) throws IOException;
 
     /**
      * Writes a single signed long value.
      * 
      * @param signedLong
      */
-    public abstract void readSignedLong(long signedLong) throws IOException;
+    public abstract void writeSignedLong(long signedLong) throws IOException;
+
+    /**
+     * Writes a single float value.
+     * 
+     * @param f
+     */
+    public abstract void writeFloat(float f) throws IOException;
+
+    /**
+     * Writes a single double value.
+     * 
+     * @param d
+     */
+    public abstract void writeDouble(double d) throws IOException;
 
     /**
      * Reads a NUL terminated string. There is no conversion provided with this

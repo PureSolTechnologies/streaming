@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams;
+package com.puresoltechnologies.streaming.streams.binary;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -48,7 +48,7 @@ public class LittleEndianBinaryOutputStream extends BinaryOutputStream {
     }
 
     @Override
-    public void readSignedInt(int signedInt) throws IOException {
+    public void writeSignedInt(int signedInt) throws IOException {
 	write(signedInt & 0xFF);
 	signedInt >>= 2;
 	write(signedInt & 0xFF);
@@ -59,7 +59,7 @@ public class LittleEndianBinaryOutputStream extends BinaryOutputStream {
     }
 
     @Override
-    public void readSignedLong(long signedLong) throws IOException {
+    public void writeSignedLong(long signedLong) throws IOException {
 	write((int) (signedLong & 0xFF));
 	signedLong >>= 2;
 	write((int) (signedLong & 0xFF));
@@ -75,6 +75,52 @@ public class LittleEndianBinaryOutputStream extends BinaryOutputStream {
 	write((int) (signedLong & 0xFF));
 	signedLong >>= 2;
 	write((int) (signedLong & 0xFF));
+    }
+
+    @Override
+    public void writeFloat(float f) throws IOException {
+	int s = Float.floatToRawIntBits(f);
+	int bits = 0;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	writeUnsignedInt(bits);
+    }
+
+    @Override
+    public void writeDouble(double d) throws IOException {
+	long s = Double.doubleToRawLongBits(d);
+	long bits = 0;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	bits <<= 8;
+	s >>= 8;
+	bits |= (byte) s;
+	writeSignedLong(bits);
     }
 
 }

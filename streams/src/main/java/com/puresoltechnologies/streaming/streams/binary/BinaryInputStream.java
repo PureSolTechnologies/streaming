@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams;
+package com.puresoltechnologies.streaming.streams.binary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -128,6 +128,20 @@ public abstract class BinaryInputStream extends InputStream {
      *         {@value Long#MAX_VALUE}.
      */
     public abstract long readSignedLong() throws IOException;
+
+    /**
+     * Reads a single float value.
+     * 
+     * @return A float value is returned.
+     */
+    public abstract float readFloat() throws IOException;
+
+    /**
+     * Reads a single double value.
+     * 
+     * @return A double value is returned.
+     */
+    public abstract double readDouble() throws IOException;
 
     /**
      * This method reads the specified amount of bytes. If not enough bytes can be

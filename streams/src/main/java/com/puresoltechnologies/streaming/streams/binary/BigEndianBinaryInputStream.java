@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams;
+package com.puresoltechnologies.streaming.streams.binary;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +66,18 @@ public class BigEndianBinaryInputStream extends BinaryInputStream {
 	result |= (((long) bytes[6] & 0xFF) << 8);
 	result |= ((long) bytes[7] & 0xFF);
 	return result;
+    }
+
+    @Override
+    public float readFloat() throws IOException {
+	int bits = readSignedInt();
+	return Float.intBitsToFloat(bits);
+    }
+
+    @Override
+    public double readDouble() throws IOException {
+	long bits = readSignedLong();
+	return Double.longBitsToDouble(bits);
     }
 
 }

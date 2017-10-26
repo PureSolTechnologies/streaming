@@ -7,6 +7,9 @@ import java.nio.charset.Charset;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.streaming.streams.binary.BigEndianBinaryInputStream;
+import com.puresoltechnologies.streaming.streams.binary.LittleEndianBinaryInputStream;
+
 public class LittleEndianBinaryInputStreamTest {
 
     @Test
