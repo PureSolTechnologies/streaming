@@ -71,36 +71,37 @@ public abstract class BinaryOutputStream extends OutputStream {
      * Writes a single unsigned short value.
      * 
      * @param unsignedShort
+     * @throws IOException
      */
-    public abstract void writeUnsignedShort(int unsignedShort);
+    public abstract void writeUnsignedShort(int unsignedShort) throws IOException;
 
     /**
      * Writes a single signed short value.
      * 
      * @param signedShort
      */
-    public abstract void writeSignedShort(short signedShort);
+    public abstract void writeSignedShort(short signedShort) throws IOException;
 
     /**
      * Writes a single unsigned integer value.
      * 
      * @param unsignedInt
      */
-    public abstract void writeUnsignedInt(long unsignedInt);
+    public abstract void writeUnsignedInt(long unsignedInt) throws IOException;
 
     /**
      * Writes a single signed integer value.
      * 
      * @param signedInt
      */
-    public abstract void readSignedInt(int signedInt);
+    public abstract void readSignedInt(int signedInt) throws IOException;
 
     /**
      * Writes a single signed long value.
      * 
      * @param signedLong
      */
-    public abstract void readSignedLong(long signedLong);
+    public abstract void readSignedLong(long signedLong) throws IOException;
 
     /**
      * Reads a NUL terminated string. There is no conversion provided with this

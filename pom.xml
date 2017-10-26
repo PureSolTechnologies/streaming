@@ -354,6 +354,7 @@
 	<modules>
 		<module>streams</module>
 		<module>iterators</module>
+		<module>csv</module>
 	</modules>
 
 </project>

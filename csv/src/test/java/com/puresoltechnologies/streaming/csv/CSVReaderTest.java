@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams.csv;
+package com.puresoltechnologies.streaming.csv;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,9 @@ import java.io.InputStream;
 import org.junit.Test;
 
 import com.puresoltechnologies.streaming.CountingStreamIterator;
+import com.puresoltechnologies.streaming.csv.CSVHeader;
+import com.puresoltechnologies.streaming.csv.CSVReader;
+import com.puresoltechnologies.streaming.csv.CSVRecord;
 
 public class CSVReaderTest {
 

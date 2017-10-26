@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams.csv;
+package com.puresoltechnologies.streaming.csv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

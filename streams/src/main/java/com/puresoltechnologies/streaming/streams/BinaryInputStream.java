@@ -17,6 +17,27 @@ import java.nio.charset.CharsetDecoder;
  */
 public abstract class BinaryInputStream extends InputStream {
 
+    /**
+     * This method creates a new {@link BinaryInputStream} for a given
+     * {@link ByteOrder}.
+     * 
+     * @param inputStream
+     *            is the {@link InputStream} to read from.
+     * @param byteOrder
+     *            is the byte order to be used for reading the input stream.
+     * @return Returns a new {@link BinaryInputStream} for the byte order provided.
+     * @throws IOException
+     */
+    public static BinaryInputStream of(InputStream inputStream, ByteOrder byteOrder) throws IOException {
+	if (byteOrder == ByteOrder.LITTLE_ENDIAN) {
+	    return new LittleEndianBinaryInputStream(inputStream);
+	} else if (byteOrder == ByteOrder.BIG_ENDIAN) {
+	    return new BigEndianBinaryInputStream(inputStream);
+	} else {
+	    throw new IOException("Byte order '" + byteOrder.toString() + "' is not supported.");
+	}
+    }
+
     private final InputStream inputStream;
 
     /**
