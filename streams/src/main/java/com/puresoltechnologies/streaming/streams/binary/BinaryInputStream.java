@@ -15,30 +15,10 @@ import java.nio.charset.CharsetDecoder;
  * @author Rick-Rainer Ludwig
  *
  */
-public abstract class BinaryInputStream extends InputStream {
-
-    /**
-     * This method creates a new {@link BinaryInputStream} for a given
-     * {@link ByteOrder}.
-     * 
-     * @param inputStream
-     *            is the {@link InputStream} to read from.
-     * @param byteOrder
-     *            is the byte order to be used for reading the input stream.
-     * @return Returns a new {@link BinaryInputStream} for the byte order provided.
-     * @throws IOException
-     */
-    public static BinaryInputStream of(InputStream inputStream, ByteOrder byteOrder) throws IOException {
-	if (byteOrder == ByteOrder.LITTLE_ENDIAN) {
-	    return new LittleEndianBinaryInputStream(inputStream);
-	} else if (byteOrder == ByteOrder.BIG_ENDIAN) {
-	    return new BigEndianBinaryInputStream(inputStream);
-	} else {
-	    throw new IOException("Byte order '" + byteOrder.toString() + "' is not supported.");
-	}
-    }
+public class BinaryInputStream extends InputStream {
 
     private final InputStream inputStream;
+    private final Bytes byteConverter;
 
     /**
      * This is the default constructor.
@@ -46,17 +26,11 @@ public abstract class BinaryInputStream extends InputStream {
      * @param inputStream
      *            this is the {@link InputStream} to read binary data from.
      */
-    public BinaryInputStream(InputStream inputStream) {
+    public BinaryInputStream(InputStream inputStream, ByteOrder byteOrder) {
 	super();
 	this.inputStream = inputStream;
+	this.byteConverter = Bytes.forByteOrder(byteOrder);
     }
-
-    /**
-     * This method provides the byte order used by this input stream.
-     * 
-     * @return A {@link ByteOrder} object is returned.
-     */
-    public abstract ByteOrder getByteOrder();
 
     @Override
     public final int read() throws IOException {
@@ -70,13 +44,24 @@ public abstract class BinaryInputStream extends InputStream {
     }
 
     /**
+     * This method provides the byte order used by this input stream.
+     * 
+     * @return A {@link ByteOrder} object is returned.
+     */
+    public ByteOrder getByteOrder() {
+	return byteConverter.getByteOrder();
+    }
+
+    /**
      * Reads a single unsigned byte value.
      * 
      * @return A int value is returned in the range of 0 to 255.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final int readUnsignedByte() throws IOException {
-	return read();
+	byte[] bytes = readBytes(1);
+	return byteConverter.toUnsignedByte(bytes);
     }
 
     /**
@@ -85,9 +70,11 @@ public abstract class BinaryInputStream extends InputStream {
      * @return A byte value is returned in the range of {@value Byte#MIN_VALUE} to
      *         {@value Byte#MAX_VALUE}.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final byte readSignedByte() throws IOException {
-	return (byte) read();
+	byte[] bytes = readBytes(1);
+	return byteConverter.toByte(bytes);
     }
 
     /**
@@ -95,53 +82,87 @@ public abstract class BinaryInputStream extends InputStream {
      * 
      * @return An short value is returned in the range of 0 to 65.535.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract int readUnsignedShort() throws IOException;
+    public int readUnsignedShort() throws IOException {
+	byte[] bytes = readBytes(2);
+	return byteConverter.toUnsignedShort(bytes);
+    }
 
     /**
      * Reads a single signed short value.
      * 
      * @return A short value is returned in the range of {@value Short#MIN_VALUE} to
      *         {@value Short#MAX_VALUE}.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract short readSignedShort() throws IOException;
+    public short readSignedShort() throws IOException {
+	byte[] bytes = readBytes(2);
+	return byteConverter.toShort(bytes);
+    }
 
     /**
      * Reads a single unsigned integer value.
      * 
      * @return An integer value is returned in the range of 0 to 4.294.967.295.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract long readUnsignedInt() throws IOException;
+    public long readUnsignedInt() throws IOException {
+	byte[] bytes = readBytes(4);
+	return byteConverter.toUnsignedInt(bytes);
+    }
 
     /**
      * Reads a single signed integer value.
      * 
      * @return An integer value is returned in the range of
      *         {@value Integer#MIN_VALUE} to {@value Integer#MAX_VALUE}.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract int readSignedInt() throws IOException;
+    public int readSignedInt() throws IOException {
+	byte[] bytes = readBytes(4);
+	return byteConverter.toInt(bytes);
+    }
 
     /**
      * Reads a single signed long value.
      * 
      * @return A long value is returned in the range of {@value Long#MIN_VALUE} to
      *         {@value Long#MAX_VALUE}.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract long readSignedLong() throws IOException;
+    public long readSignedLong() throws IOException {
+	byte[] bytes = readBytes(8);
+	return byteConverter.toLong(bytes);
+    }
 
     /**
      * Reads a single float value.
      * 
      * @return A float value is returned.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract float readFloat() throws IOException;
+    public float readFloat() throws IOException {
+	byte[] bytes = readBytes(4);
+	return byteConverter.toFloat(bytes);
+    }
 
     /**
      * Reads a single double value.
      * 
      * @return A double value is returned.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract double readDouble() throws IOException;
+    public double readDouble() throws IOException {
+	byte[] bytes = readBytes(8);
+	return byteConverter.toDouble(bytes);
+    }
 
     /**
      * This method reads the specified amount of bytes. If not enough bytes can be
@@ -155,11 +176,11 @@ public abstract class BinaryInputStream extends InputStream {
      *             is thrown in case of not enough bytes available or any other I/O
      *             issue.
      */
-    public final int[] readBytes(int amount) throws IOException {
-	int[] bytes = new int[amount];
+    public final byte[] readBytes(int amount) throws IOException {
+	byte[] bytes = new byte[amount];
 	int pos = 0;
 	while (pos < bytes.length) {
-	    bytes[pos] = read();
+	    bytes[pos] = (byte) read();
 	    if (bytes[pos] == 1) {
 		throw new IOException("Not enough bytes left in stream.");
 	    }
@@ -175,6 +196,7 @@ public abstract class BinaryInputStream extends InputStream {
      * @return A {@link ByteBuffer} is returned containing the bytes of the read
      *         String..
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final byte[] readNulTerminatedString() throws IOException {
 	ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(256);
@@ -188,9 +210,12 @@ public abstract class BinaryInputStream extends InputStream {
     /**
      * Reads a NUL terminated string. There is not conversion provided with this
      * function.
-     * 
+     *
+     * @param charset
+     *            is the {@link Charset} to use for string conversion.
      * @return A byte array is returned containing the bytes of the read String..
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final String readNulTerminatedString(Charset charset) throws IOException {
 	ByteBuffer bytes = ByteBuffer.wrap(readNulTerminatedString());

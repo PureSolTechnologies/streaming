@@ -3,6 +3,7 @@ package com.puresoltechnologies.streaming.csv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import com.puresoltechnologies.streaming.streams.InputStreamIterator.InputStreamPartReader;
 
@@ -52,7 +53,7 @@ public class CSVRecordReader implements InputStreamPartReader<InputStream, CSVRe
 		++quoteCount;
 	    }
 	}
-	return byteArrayOutputStream.toString();
+	return byteArrayOutputStream.toString(Charset.defaultCharset().name());
     }
 
 }

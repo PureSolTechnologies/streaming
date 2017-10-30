@@ -14,9 +14,10 @@ import java.nio.charset.CharsetEncoder;
  * @author Rick-Rainer Ludwig
  *
  */
-public abstract class BinaryOutputStream extends OutputStream {
+public class BinaryOutputStream extends OutputStream {
 
     private final OutputStream outputStream;
+    private final Bytes byteConverter;
 
     /**
      * This is the default constructor.
@@ -24,17 +25,11 @@ public abstract class BinaryOutputStream extends OutputStream {
      * @param outputStream
      *            this is the {@link OutputStream} to read binary data from.
      */
-    public BinaryOutputStream(OutputStream outputStream) {
+    public BinaryOutputStream(OutputStream outputStream, ByteOrder byteOrder) {
 	super();
 	this.outputStream = outputStream;
+	this.byteConverter = Bytes.forByteOrder(byteOrder);
     }
-
-    /**
-     * This method provides the byte order used by this input stream.
-     * 
-     * @return A {@link ByteOrder} object is returned.
-     */
-    public abstract ByteOrder getByteOrder();
 
     @Override
     public void write(int b) throws IOException {
@@ -48,81 +43,138 @@ public abstract class BinaryOutputStream extends OutputStream {
     }
 
     /**
+     * This method provides the byte order used by this input stream.
+     * 
+     * @return A {@link ByteOrder} object is returned.
+     */
+    public ByteOrder getByteOrder() {
+	return byteConverter.getByteOrder();
+    }
+
+    /**
      * Writes a single unsigned byte value.
      * 
      * @param unsignedByte
+     *            to be written.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final void writeUnsignedByte(int unsignedByte) throws IOException {
-	write(unsignedByte);
+	write(byteConverter.fromUnsignedByte(unsignedByte));
     }
 
     /**
      * Writes a single signed byte value.
      * 
      * @param signedByte
+     *            to be written.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final void writeSignedByte(byte signedByte) throws IOException {
-	write(signedByte & 0xFF);
+	write(byteConverter.fromByte(signedByte));
     }
 
     /**
      * Writes a single unsigned short value.
      * 
      * @param unsignedShort
+     *            to be written.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeUnsignedShort(int unsignedShort) throws IOException;
+    public void writeUnsignedShort(int unsignedShort) throws IOException {
+	write(byteConverter.fromUnsignedShort(unsignedShort));
+    }
 
     /**
      * Writes a single signed short value.
      * 
      * @param signedShort
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeSignedShort(short signedShort) throws IOException;
+    public void writeSignedShort(short signedShort) throws IOException {
+	byte[] bytes = byteConverter.fromShort(signedShort);
+	write(bytes);
+    }
 
     /**
      * Writes a single unsigned integer value.
      * 
      * @param unsignedInt
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeUnsignedInt(long unsignedInt) throws IOException;
+    public void writeUnsignedInt(long unsignedInt) throws IOException {
+	byte[] bytes = byteConverter.fromLong(unsignedInt);
+	write(bytes);
+    }
 
     /**
      * Writes a single signed integer value.
      * 
      * @param signedInt
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeSignedInt(int signedInt) throws IOException;
+    public void writeSignedInt(int signedInt) throws IOException {
+	byte[] bytes = byteConverter.fromInt(signedInt);
+	write(bytes);
+    }
 
     /**
      * Writes a single signed long value.
      * 
      * @param signedLong
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeSignedLong(long signedLong) throws IOException;
+    public void writeSignedLong(long signedLong) throws IOException {
+	byte[] bytes = byteConverter.fromLong(signedLong);
+	write(bytes);
+    }
 
     /**
      * Writes a single float value.
      * 
      * @param f
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeFloat(float f) throws IOException;
+    public void writeFloat(float f) throws IOException {
+	byte[] bytes = byteConverter.fromFloat(f);
+	write(bytes);
+    }
 
     /**
      * Writes a single double value.
      * 
      * @param d
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
      */
-    public abstract void writeDouble(double d) throws IOException;
+    public void writeDouble(double d) throws IOException {
+	byte[] bytes = byteConverter.fromDouble(d);
+	write(bytes);
+    }
 
     /**
      * Reads a NUL terminated string. There is no conversion provided with this
      * function.
      * 
-     * @return A byte array is returned containing the bytes of the read String..
+     * @param string
+     *            is the {@link String} to be written.
+     * @param charset
+     *            is the {@link Charset} to be used for conversion.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     public final void writeNulTerminatedString(String string, Charset charset) throws IOException {
 	CharsetEncoder encoder = charset.newEncoder();
@@ -135,7 +187,9 @@ public abstract class BinaryOutputStream extends OutputStream {
      * function.
      * 
      * @param bytes
+     *            to be written.
      * @throws IOException
+     *             is thrown in case of I/O issues.
      */
     protected void writeNulTerminatedString(ByteBuffer bytes) throws IOException {
 	write(bytes.array());

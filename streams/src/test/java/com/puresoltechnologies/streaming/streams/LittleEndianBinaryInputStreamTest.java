@@ -3,19 +3,19 @@ package com.puresoltechnologies.streaming.streams;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.streaming.streams.binary.BigEndianBinaryInputStream;
-import com.puresoltechnologies.streaming.streams.binary.LittleEndianBinaryInputStream;
+import com.puresoltechnologies.streaming.streams.binary.BinaryInputStream;
 
 public class LittleEndianBinaryInputStreamTest {
 
     @Test
     public void testSignedByte() throws IOException {
 	TestInputStream inputStream = new TestInputStream(0xFF, 0x00, 0x7F, 0x80, 0xD6);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(-1, lebInputStream.readSignedByte());
 	    assertEquals(0, lebInputStream.readSignedByte());
 	    assertEquals(127, lebInputStream.readSignedByte());
@@ -27,7 +27,7 @@ public class LittleEndianBinaryInputStreamTest {
     @Test
     public void testUnsignedByte() throws IOException {
 	TestInputStream inputStream = new TestInputStream(0xFF, 0x00, 0x7F, 0x80, 0xD6);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(255, lebInputStream.readUnsignedByte());
 	    assertEquals(0, lebInputStream.readUnsignedByte());
 	    assertEquals(127, lebInputStream.readUnsignedByte());
@@ -44,7 +44,7 @@ public class LittleEndianBinaryInputStreamTest {
 		0xFF, 0x7F, //
 		0x00, 0x80, //
 		0x00, 0xD6);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(-1, lebInputStream.readSignedShort());
 	    assertEquals(0, lebInputStream.readSignedShort());
 	    assertEquals(32767, lebInputStream.readSignedShort());
@@ -61,7 +61,7 @@ public class LittleEndianBinaryInputStreamTest {
 		0xFF, 0x7F, //
 		0x00, 0x80, //
 		0xD6, 0x00);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(65535, lebInputStream.readUnsignedShort());
 	    assertEquals(0, lebInputStream.readUnsignedShort());
 	    assertEquals(32767, lebInputStream.readUnsignedShort());
@@ -78,7 +78,7 @@ public class LittleEndianBinaryInputStreamTest {
 		0xFF, 0xFF, 0xFF, 0x7F, //
 		0x00, 0x00, 0x00, 0x80, //
 		0x00, 0x00, 0x00, 0xD6);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(-1, lebInputStream.readSignedInt());
 	    assertEquals(0, lebInputStream.readSignedInt());
 	    assertEquals(2147483647, lebInputStream.readSignedInt());
@@ -95,7 +95,7 @@ public class LittleEndianBinaryInputStreamTest {
 		0xFF, 0xFF, 0xFF, 0x7F, //
 		0x00, 0x00, 0x00, 0x80, //
 		0xD6, 0x00, 0x00, 0x00);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(4294967295l, lebInputStream.readUnsignedInt());
 	    assertEquals(0l, lebInputStream.readUnsignedInt());
 	    assertEquals(2147483647l, lebInputStream.readUnsignedInt());
@@ -112,7 +112,7 @@ public class LittleEndianBinaryInputStreamTest {
 		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, //
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, //
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xD6);
-	try (LittleEndianBinaryInputStream lebInputStream = new LittleEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    assertEquals(-1, lebInputStream.readSignedLong());
 	    assertEquals(0, lebInputStream.readSignedLong());
 	    assertEquals(9223372036854775807l, lebInputStream.readSignedLong());
@@ -125,7 +125,7 @@ public class LittleEndianBinaryInputStreamTest {
     public void testReadNulTerminatedString() throws IOException {
 	TestInputStream inputStream = new TestInputStream( //
 		'A', 'B', 'C', 0);
-	try (BigEndianBinaryInputStream lebInputStream = new BigEndianBinaryInputStream(inputStream)) {
+	try (BinaryInputStream lebInputStream = new BinaryInputStream(inputStream, ByteOrder.LITTLE_ENDIAN)) {
 	    String string = lebInputStream.readNulTerminatedString(Charset.forName("ASCII"));
 	    assertEquals("ABC", string);
 	}

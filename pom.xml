@@ -5,7 +5,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>streaming</officalName>
-		<commons.version>0.3.0</commons.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.streaming</groupId>
@@ -80,11 +79,6 @@
 				<groupId>com.puresoltechnologies.streaming</groupId>
 				<artifactId>streams</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>osgi</artifactId>
-				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
