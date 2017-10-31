@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams.binary;
+package com.puresoltechnologies.streaming.binary;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.puresoltechnologies.streaming.binary.Bytes;
 
 public class BigEndianBytesTest extends AbstractBytesTest {
 

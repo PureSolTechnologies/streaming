@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams.binary;
+package com.puresoltechnologies.streaming.binary;
 
 import java.nio.ByteOrder;
 

@@ -348,6 +348,7 @@
 	<modules>
 		<module>streams</module>
 		<module>iterators</module>
+		<module>binary</module>
 		<module>csv</module>
 	</modules>
 

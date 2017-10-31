@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams;
+package com.puresoltechnologies.streaming.binary;
 
 import java.io.IOException;
 import java.io.InputStream;

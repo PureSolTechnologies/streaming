@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.streams;
+package com.puresoltechnologies.streaming.binary;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,8 +7,6 @@ import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 import org.junit.Test;
-
-import com.puresoltechnologies.streaming.streams.binary.BinaryInputStream;
 
 public class LittleEndianBinaryInputStreamTest {
 
