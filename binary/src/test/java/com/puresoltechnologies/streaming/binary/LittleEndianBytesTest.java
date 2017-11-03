@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.streaming.binary.Bytes;
-
 public class LittleEndianBytesTest extends AbstractBytesTest {
 
     private static final Bytes littleEndianBytes = Bytes.forByteOrder(ByteOrder.LITTLE_ENDIAN);
@@ -168,6 +166,21 @@ public class LittleEndianBytesTest extends AbstractBytesTest {
     public void testDouble() {
 	double b = 1.23456e4;
 	byte[] bytes = littleEndianBytes.fromDouble(b);
+	assertEquals(b, littleEndianBytes.toDouble(bytes), 0.0);
+    }
+
+    @Test
+    public void testDouble2() {
+	double b = 1;
+	byte[] bytes = littleEndianBytes.fromDouble(b);
+	assertEquals(0, bytes[0]);
+	assertEquals(0, bytes[1]);
+	assertEquals(0, bytes[2]);
+	assertEquals(0, bytes[3]);
+	assertEquals(0, bytes[4]);
+	assertEquals(0, bytes[5]);
+	assertEquals(0xF0, bytes[6] & 0xFF);
+	assertEquals(0x3F, bytes[7] & 0xFF);
 	assertEquals(b, littleEndianBytes.toDouble(bytes), 0.0);
     }
 
