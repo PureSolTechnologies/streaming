@@ -180,10 +180,11 @@ public class BinaryInputStream extends InputStream {
 	byte[] bytes = new byte[amount];
 	int pos = 0;
 	while (pos < bytes.length) {
-	    bytes[pos] = (byte) read();
-	    if (bytes[pos] == 1) {
+	    int i = read();
+	    if (i == -1) {
 		throw new IOException("Not enough bytes left in stream.");
 	    }
+	    bytes[pos] = (byte) i;
 	    ++pos;
 	}
 	return bytes;
