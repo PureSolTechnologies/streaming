@@ -81,12 +81,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.core</artifactId>
-				<version>5.0.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.12</version>
@@ -205,39 +199,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>3.3.0</version>
-				<extensions>true</extensions>
-				<configuration>
-					<manifestLocation>META-INF</manifestLocation>
-					<instructions>
-						<Specification-Title>${project.name}</Specification-Title>
-						<Specification-Version>${project.version}</Specification-Version>
-						<Specification-Vendor>${project.organization.name}</Specification-Vendor>
-						<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
-						<Implementation-Version>${project.version}</Implementation-Version>
-						<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-						<Vendor-URL>${project.organization.url}</Vendor-URL>
-						<Project-URL>${project.url}</Project-URL>
-						<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
-							will not find the bundle. -->
-						<Bundle-SymbolicName>${bundle.namespace}.bundle</Bundle-SymbolicName>
-						<Bundle-Name>${bundle.namespace}.bundle</Bundle-Name>
-						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-						<Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
-						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
-						<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
-						<!-- embed compile/runtime dependencies using path that matches the 
-							copied dependency folder -->
-						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
-						<Embed-Directory>dependencies</Embed-Directory>
-						<Embed-StripGroup>true</Embed-StripGroup>
-					</instructions>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

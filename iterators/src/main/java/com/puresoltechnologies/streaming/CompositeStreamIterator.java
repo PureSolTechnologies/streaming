@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class CompositeStreamIterator<T> extends AbstractStreamIterator<T> {
 
-    private final List<Iterator<T>> iterators = new ArrayList<Iterator<T>>();
+    private final List<Iterator<T>> iterators = new ArrayList<>();
     private Iterator<T> currentIterator = null;
 
     public CompositeStreamIterator(Iterator<T>... iterators) {
