@@ -8,13 +8,17 @@
 		<version>0.4.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>csv</artifactId>
+	<artifactId>csv.mapper</artifactId>
 	<name>${officalName} - ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.streaming</groupId>
-			<artifactId>streams</artifactId>
+			<artifactId>common.mapper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.streaming</groupId>
+			<artifactId>csv</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

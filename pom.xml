@@ -72,6 +72,21 @@
 		<dependencies>
 			<dependency>
 				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>common.mapper</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>binary</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>csv</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
 				<artifactId>iterators</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -311,6 +326,9 @@
 		<module>iterators</module>
 		<module>binary</module>
 		<module>csv</module>
+		<module>common.mapper</module>
+		<module>binary.mapper</module>
+		<module>csv.mapper</module>
 	</modules>
 
 </project>
