@@ -25,7 +25,7 @@ public @interface BinaryUnsignedByte {
      * 
      * @return A {@link String} is returned containing the name.
      */
-    String name();
+    String value();
 
     /**
      * 

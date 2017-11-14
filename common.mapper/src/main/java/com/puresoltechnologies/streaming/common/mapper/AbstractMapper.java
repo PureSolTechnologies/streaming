@@ -4,23 +4,35 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractMapper<T extends Annotation> {
+public abstract class AbstractMapper<T extends Annotation> implements Mapper {
 
     private final Class<T> creatorAnnotation;
+    private final Charset charset;
     private final List<Class<? extends Annotation>> elementAnnotations = new ArrayList<>();
-
     private final Map<Class<?>, MappingDefinition<?>> definitions = new HashMap<>();
 
-    public AbstractMapper(Class<T> creatorAnnotation, Collection<Class<? extends Annotation>> elementAnnotations) {
+    public AbstractMapper(Class<T> creatorAnnotation, Collection<Class<? extends Annotation>> elementAnnotations,
+	    Charset charset) {
 	super();
 	this.creatorAnnotation = creatorAnnotation;
 	this.elementAnnotations.addAll(elementAnnotations);
+	this.charset = charset;
+    }
+
+    /**
+     * This method returns the charset which is used to interpret strings.
+     * 
+     * @return A {@link Charset} is returned.
+     */
+    public Charset getCharset() {
+	return charset;
     }
 
     protected <C> MappingDefinition<C> generateMappingDefinition(Class<C> clazz) throws MappingException {
@@ -81,7 +93,7 @@ public abstract class AbstractMapper<T extends Annotation> {
 		for (Annotation annotation : parameter.getAnnotations()) {
 		    Class<? extends Annotation> annotationType = annotation.annotationType();
 		    if (elementAnnotations.contains(annotationType)) {
-			String name = (String) annotationType.getMethod("name").invoke(annotation);
+			String name = (String) annotationType.getMethod("value").invoke(annotation);
 			int position = (int) annotationType.getMethod("position").invoke(annotation);
 			if (definition != null) {
 			    throw new MappingException("Multiple definitions are not allowed on parameter " + name
@@ -92,8 +104,12 @@ public abstract class AbstractMapper<T extends Annotation> {
 				    + clazz.getSimpleName() + "'s creator constructor.");
 			}
 			position = parameterId;
-			definition = new ElementDefinition<>(position, name, elementType);
+			definition = new ElementDefinition<>(position, name, elementType, annotationType);
 		    }
+		}
+		if (definition == null) {
+		    throw new MappingException("No known annotation found for parameter with id " + parameterId + " in "
+			    + clazz.getSimpleName() + "'s creator constructor.");
 		}
 		mappingDefinition.addElement(definition);
 	    }

@@ -53,6 +53,17 @@ public class BinaryInputStream extends InputStream {
     }
 
     /**
+     * Reads a single boolean value.
+     * 
+     * @return A boolean value is returned .
+     * @throws IOException
+     *             is thrown in case of I/O issues.
+     */
+    public final boolean readBoolean() throws IOException {
+	return readSignedByte() != 0;
+    }
+
+    /**
      * Reads a single unsigned byte value.
      * 
      * @return A int value is returned in the range of 0 to 255.

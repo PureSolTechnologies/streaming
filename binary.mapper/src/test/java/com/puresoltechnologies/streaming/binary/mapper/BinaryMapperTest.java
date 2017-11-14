@@ -1,5 +1,6 @@
 package com.puresoltechnologies.streaming.binary.mapper;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
@@ -21,7 +22,7 @@ public class BinaryMapperTest {
 	private final int ub;
 
 	@BinaryCreator
-	public MapperExample(@BinaryUnsignedByte(name = "ub") int ub) {
+	public MapperExample(@BinaryUnsignedByte("ub") int ub) {
 	    this.ub = ub;
 	}
 
@@ -46,6 +47,7 @@ public class BinaryMapperTest {
 
 		MapperExample structure = mapper.read(binaryInputStream, MapperExample.class);
 		assertNotNull(structure);
+		assertEquals(250, structure.getUb());
 	    }
 	}
     }

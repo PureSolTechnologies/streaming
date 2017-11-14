@@ -52,6 +52,18 @@ public class BinaryOutputStream extends OutputStream {
     }
 
     /**
+     * Writes a single boolean value.
+     * 
+     * @param b
+     *            to be written.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
+     */
+    public final void writeBoolean(boolean b) throws IOException {
+	write(b ? 1 : 0);
+    }
+
+    /**
      * Writes a single unsigned byte value.
      * 
      * @param unsignedByte
