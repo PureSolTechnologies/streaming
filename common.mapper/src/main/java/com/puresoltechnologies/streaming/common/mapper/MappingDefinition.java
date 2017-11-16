@@ -2,6 +2,7 @@ package com.puresoltechnologies.streaming.common.mapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MappingDefinition<T> {
@@ -16,7 +17,12 @@ public class MappingDefinition<T> {
 
     public void addElement(ElementDefinition<?> definition) {
 	elementDefinitions.add(definition);
-	Collections.sort(elementDefinitions);
+	Collections.sort(elementDefinitions, new Comparator<ElementDefinition<?>>() {
+	    @Override
+	    public int compare(ElementDefinition<?> o1, ElementDefinition<?> o2) {
+		return Integer.compare(o1.getPosition(), o2.getPosition());
+	    }
+	});
     }
 
     public List<ElementDefinition<?>> getElementDefinitionsOrdered() {

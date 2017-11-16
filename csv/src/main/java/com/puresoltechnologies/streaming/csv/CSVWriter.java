@@ -2,6 +2,7 @@ package com.puresoltechnologies.streaming.csv;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -14,9 +15,15 @@ import java.util.List;
 public class CSVWriter {
 
     private final OutputStream outputStream;
+    private final Charset charset;
 
     public CSVWriter(OutputStream outputStream) {
+	this(outputStream, Charset.defaultCharset());
+    }
+
+    public CSVWriter(OutputStream outputStream, Charset charset) {
 	this.outputStream = outputStream;
+	this.charset = charset;
     }
 
     public void writeHeader(CSVHeader header) throws IOException {
@@ -65,7 +72,7 @@ public class CSVWriter {
     }
 
     private void writeValue(String value) throws IOException {
-	outputStream.write(value.getBytes());
+	outputStream.write(value.getBytes(charset));
     }
 
 }

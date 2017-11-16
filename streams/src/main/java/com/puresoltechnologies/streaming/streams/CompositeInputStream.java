@@ -21,13 +21,13 @@ public class CompositeInputStream extends InputStream {
 
     public CompositeInputStream(InputStream... inputStreams) {
 	for (InputStream inputStream : inputStreams) {
-	    Objects.requireNonNull(inputStreams, "inputStreams must not be null");
+	    Objects.requireNonNull(inputStreams, "Input streams must not be null");
 	    this.inputStreams.add(inputStream);
 	}
     }
 
     public CompositeInputStream(Collection<InputStream> inputStreams) {
-	Objects.requireNonNull(inputStreams, "Iterators must not be null");
+	Objects.requireNonNull(inputStreams, "Input streams must not be null");
 	this.inputStreams.addAll(inputStreams);
     }
 

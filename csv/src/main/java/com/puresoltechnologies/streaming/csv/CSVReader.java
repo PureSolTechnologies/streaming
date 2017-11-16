@@ -1,6 +1,7 @@
 package com.puresoltechnologies.streaming.csv;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -15,19 +16,25 @@ import com.puresoltechnologies.streaming.streams.InputStreamIterator;
  */
 public class CSVReader implements StreamIterator<CSVRecord> {
 
-    private final InputStream inputStream;
     private final InputStreamIterator<InputStream, CSVRecord> streamIterator;
     private final boolean hasHeader;
     private final CSVHeader header;
 
     public CSVReader(InputStream inputStream) {
-	this(inputStream, false);
+	this(inputStream, Charset.defaultCharset(), false);
+    }
+
+    public CSVReader(InputStream inputStream, Charset charset) {
+	this(inputStream, charset, false);
     }
 
     public CSVReader(InputStream inputStream, boolean hasHeader) {
+	this(inputStream, Charset.defaultCharset(), hasHeader);
+    }
+
+    public CSVReader(InputStream inputStream, Charset charset, boolean hasHeader) {
 	super();
-	this.inputStream = inputStream;
-	streamIterator = new InputStreamIterator<InputStream, CSVRecord>(inputStream, new CSVRecordReader());
+	streamIterator = new InputStreamIterator<InputStream, CSVRecord>(inputStream, new CSVRecordReader(charset));
 	this.hasHeader = hasHeader;
 	header = readHeader();
     }

@@ -8,16 +8,18 @@ import java.lang.reflect.Method;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class ElementDefinition<T> implements Comparable<ElementDefinition<T>> {
+public class ElementDefinition<T> {
 
+    private final Class<?> clazz;
     private final int position;
     private final String name;
     private final Class<T> type;
     private final Class<? extends Annotation> annotation;
     private final Method getter;
 
-    ElementDefinition(int position, String name, Class<T> type, Class<? extends Annotation> annotation)
+    ElementDefinition(Class<?> clazz, int position, String name, Class<T> type, Class<? extends Annotation> annotation)
 	    throws NoSuchMethodException {
+	this.clazz = clazz;
 	this.position = position;
 	this.name = name;
 	this.type = type;
@@ -27,7 +29,7 @@ public class ElementDefinition<T> implements Comparable<ElementDefinition<T>> {
 
     private Method findGetter(String name, Class<T> type) throws NoSuchMethodException {
 	String getterName = "get" + name.substring(0, 1).toUpperCase() + (name.length() > 1 ? name.substring(1) : "");
-	return type.getMethod(getterName);
+	return clazz.getMethod(getterName);
     }
 
     public int getPosition() {
@@ -48,11 +50,6 @@ public class ElementDefinition<T> implements Comparable<ElementDefinition<T>> {
 
     public Method getGetter() {
 	return getter;
-    }
-
-    @Override
-    public int compareTo(ElementDefinition<T> o) {
-	return Integer.compare(position, o.position);
     }
 
 }

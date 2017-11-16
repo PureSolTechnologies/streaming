@@ -2,6 +2,7 @@ package com.puresoltechnologies.streaming.binary.mapper;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -71,7 +72,8 @@ public class BinaryMapper extends AbstractMapper<BinaryCreator> {
 		types[i] = elementDefinition.getType();
 		parameters[i] = readValue(binaryInputStream, elementDefinition);
 	    }
-	    C c = clazz.getConstructor(types).newInstance(parameters);
+	    Constructor<C> constructor = clazz.getConstructor(types);
+	    C c = constructor.newInstance(parameters);
 	    return c;
 	} catch (MappingException | NoSuchMethodException | SecurityException | InstantiationException
 		| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

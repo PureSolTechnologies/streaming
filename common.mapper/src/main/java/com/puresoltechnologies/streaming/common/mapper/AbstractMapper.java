@@ -104,7 +104,7 @@ public abstract class AbstractMapper<T extends Annotation> implements Mapper {
 				    + clazz.getSimpleName() + "'s creator constructor.");
 			}
 			position = parameterId;
-			definition = new ElementDefinition<>(position, name, elementType, annotationType);
+			definition = new ElementDefinition<>(clazz, position, name, elementType, annotationType);
 		    }
 		}
 		if (definition == null) {
@@ -116,7 +116,8 @@ public abstract class AbstractMapper<T extends Annotation> implements Mapper {
 	    return mappingDefinition;
 	} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 		| SecurityException e) {
-	    throw new MappingException("Could not create mapping definition for class " + clazz.getSimpleName() + ".");
+	    throw new MappingException("Could not create mapping definition for class " + clazz.getSimpleName() + ".",
+		    e);
 	}
     }
 }

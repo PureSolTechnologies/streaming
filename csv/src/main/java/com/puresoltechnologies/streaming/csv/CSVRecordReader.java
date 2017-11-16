@@ -14,6 +14,16 @@ import com.puresoltechnologies.streaming.streams.InputStreamIterator.InputStream
  */
 public class CSVRecordReader implements InputStreamPartReader<InputStream, CSVRecord> {
 
+    private final Charset charset;
+
+    public CSVRecordReader() {
+	this(Charset.defaultCharset());
+    }
+
+    public CSVRecordReader(Charset charset) {
+	this.charset = charset;
+    }
+
     @Override
     public CSVRecord readPart(InputStream inputStream) {
 	try {
@@ -53,7 +63,7 @@ public class CSVRecordReader implements InputStreamPartReader<InputStream, CSVRe
 		++quoteCount;
 	    }
 	}
-	return byteArrayOutputStream.toString(Charset.defaultCharset().name());
+	return byteArrayOutputStream.toString(charset.name());
     }
 
 }
