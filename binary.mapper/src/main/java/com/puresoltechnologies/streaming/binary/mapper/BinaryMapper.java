@@ -151,7 +151,8 @@ public class BinaryMapper extends AbstractMapper<BinaryCreator> {
 	    binaryOutputStream.writeUnsignedInt((long) value);
 	} else if (type.equals(BinaryUnsignedShort.class)) {
 	    binaryOutputStream.writeUnsignedShort((int) value);
+	} else {
+	    throw new IOException("Element annotation '" + type.getSimpleName() + "' is not supported.");
 	}
-	throw new IOException("Element annotation '" + type.getSimpleName() + "' is not supported.");
     }
 }

@@ -7,47 +7,50 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.puresoltechnologies.streaming.binary.BinaryInputStream;
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
-import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryCreator;
-import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryUnsignedByte;
 
-public class BinaryMapperTest {
+@RunWith(Parameterized.class)
+public class BinaryMapperTest<T> {
 
-    static class MapperExample {
+    @Parameters(name = "{0}")
+    public static Iterable<Object[]> data() {
+	return Arrays.asList(new Object[][] { //
+		{ ByteExample.class, new ByteExample(250, (byte) -42) }, //
+	});
+    }
 
-	private final int ub;
+    private final Class<T> clazz;
+    private final BinaryMapper mapper = new BinaryMapper();
+    private final Object original;
 
-	@BinaryCreator
-	public MapperExample(@BinaryUnsignedByte("ub") int ub) {
-	    this.ub = ub;
-	}
-
-	public int getUb() {
-	    return ub;
-	}
-
+    public BinaryMapperTest(Class<T> clazz, Object o) {
+	super();
+	this.clazz = clazz;
+	this.original = o;
     }
 
     @Test
     public void testDeserialization() throws BinaryMappingException, IOException {
+
 	try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		BinaryOutputStream binaryOutputStream = new BinaryOutputStream(byteArrayOutputStream,
 			ByteOrder.LITTLE_ENDIAN)) {
-	    binaryOutputStream.writeUnsignedByte(250);
+	    mapper.write(binaryOutputStream, original);
 	    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
 		    byteArrayOutputStream.toByteArray());
 		    BinaryInputStream binaryInputStream = new BinaryInputStream(byteArrayInputStream,
 			    ByteOrder.LITTLE_ENDIAN)) {
-
-		BinaryMapper mapper = new BinaryMapper();
-
-		MapperExample structure = mapper.read(binaryInputStream, MapperExample.class);
-		assertNotNull(structure);
-		assertEquals(250, structure.getUb());
+		T deserialized = mapper.read(binaryInputStream, clazz);
+		assertNotNull(deserialized);
+		assertEquals(original, deserialized);
 	    }
 	}
     }

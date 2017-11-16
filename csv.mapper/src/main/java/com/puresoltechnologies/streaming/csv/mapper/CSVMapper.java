@@ -129,8 +129,9 @@ public class CSVMapper extends AbstractMapper<CSVCreator> {
 	    csvWriter.write((Short) value);
 	} else if (type.equals(CSVString.class)) {
 	    csvWriter.write((String) value);
+	} else {
+	    throw new IOException("Element annotation '" + type.getSimpleName() + "' is not supported.");
 	}
-	throw new IOException("Element annotation '" + type.getSimpleName() + "' is not supported.");
     }
 
 }
