@@ -121,7 +121,7 @@ public class BinaryInputStream extends InputStream {
      *             is thrown in case of I/O issues.
      */
     public long readUnsignedInt() throws IOException {
-	byte[] bytes = readBytes(4);
+	byte[] bytes = readBytes(8);
 	return byteConverter.toUnsignedInt(bytes);
     }
 

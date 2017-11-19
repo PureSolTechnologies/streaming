@@ -24,6 +24,11 @@ public class BinaryMapperTest<T> {
     public static Iterable<Object[]> data() {
 	return Arrays.asList(new Object[][] { //
 		{ ByteExample.class, new ByteExample(250, (byte) -42) }, //
+		{ ShortExample.class, new ShortExample(65000, (short) -32000) }, //
+		{ IntExample.class, new IntExample(4000000000l, -2000000000) }, //
+		{ LongExample.class, new LongExample(123456789000l) }, //
+		{ FloatingPointExample.class, new FloatingPointExample((float) 1.234e12, 1.23456e135) }, //
+		{ BooleanStringExample.class, new BooleanStringExample(true, "Hello, world!") }, //
 	});
     }
 

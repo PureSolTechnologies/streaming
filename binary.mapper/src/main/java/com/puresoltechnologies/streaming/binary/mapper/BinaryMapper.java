@@ -116,8 +116,7 @@ public class BinaryMapper extends AbstractMapper<BinaryCreator> {
 	try {
 	    MappingDefinition<C> definition = generateMappingDefinition(clazz);
 	    List<ElementDefinition<?>> elementDefinitions = definition.getElementDefinitionsOrdered();
-	    for (int i = 0; i < elementDefinitions.size(); i++) {
-		ElementDefinition<?> elementDefinition = elementDefinitions.get(i);
+	    for (ElementDefinition<?> elementDefinition : elementDefinitions) {
 		writeValue(binaryOutputStream, elementDefinition.getAnnotation(),
 			elementDefinition.getGetter().invoke(object));
 	    }
