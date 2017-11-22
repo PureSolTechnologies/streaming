@@ -128,7 +128,7 @@ public class BigEndianBytesTest extends AbstractBytesTest {
 	long i = 0;
 	for (;;) {
 	    byte[] bytes = bigEndianBytes.fromUnsignedInt(i);
-	    assertEquals(8, bytes.length);
+	    assertEquals(4, bytes.length);
 	    assertEquals(i, bigEndianBytes.toUnsignedInt(bytes));
 	    if (i == 4_294_967_295l) {
 		break;

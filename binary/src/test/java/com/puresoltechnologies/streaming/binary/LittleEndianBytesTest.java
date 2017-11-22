@@ -129,7 +129,7 @@ public class LittleEndianBytesTest extends AbstractBytesTest {
 	long i = 0;
 	for (;;) {
 	    byte[] bytes = littleEndianBytes.fromUnsignedInt(i);
-	    assertEquals(8, bytes.length);
+	    assertEquals(4, bytes.length);
 	    assertEquals(i, littleEndianBytes.toUnsignedInt(bytes));
 	    if (i == 4_294_967_295l) {
 		break;

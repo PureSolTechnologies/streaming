@@ -107,7 +107,7 @@ public final class BigEndianBytes extends AbstractBytes {
 
     @Override
     public byte[] fromUnsignedInt(long i) {
-	byte[] bytes = new byte[8];
+	byte[] bytes = new byte[4];
 	bytes[3] = (byte) (i);
 	bytes[2] = (byte) (i >>> 8);
 	bytes[1] = (byte) (i >>> 16);

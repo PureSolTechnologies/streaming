@@ -121,7 +121,7 @@ public class BinaryOutputStream extends OutputStream {
      *             is thrown in case of I/O issues.
      */
     public void writeUnsignedInt(long unsignedInt) throws IOException {
-	byte[] bytes = byteConverter.fromLong(unsignedInt);
+	byte[] bytes = byteConverter.fromUnsignedInt(unsignedInt);
 	write(bytes);
     }
 
