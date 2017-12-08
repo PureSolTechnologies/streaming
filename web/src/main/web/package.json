@@ -1,0 +1,39 @@
+{
+  "name": "puresol-technologies",
+  "version": "2.0.0",
+  "description": "PureSol Technologies' official webpage",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npm run less && webpack-dev-server --inline --content-base ./ --env.dev --host 0.0.0.0",
+    "less": "lessc less/puresol-technologies.less css/puresol-technologies.css",
+    "build": "npm run less && webpack --env.prod"
+  },
+  "author": "Rick-Rainer Ludwig <ludwig@puresol-technologies.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "html-loader": "^0.5.1",
+    "less": "^2.7.3",
+    "octicons": "^7.0.1",
+    "source-map-loader": "^0.2.3",
+    "webpack": "^3.9.1",
+    "webpack-config-utils": "^2.3.0",
+    "webpack-dev-server": "^2.9.5"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta.2",
+    "history": "^4.7.2",
+    "jquery": "^3.2.1",
+    "popper.js": "^1.12.9",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.0",
+    "redux": "^3.7.2"
+  }
+}

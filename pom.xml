@@ -340,6 +340,7 @@
 		<module>binary.mapper</module>
 		<module>csv.mapper</module>
 		<module>test</module>
+		<module>web</module>
 	</modules>
 
 </project>
