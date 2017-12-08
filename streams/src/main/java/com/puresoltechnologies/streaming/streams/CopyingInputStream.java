@@ -40,4 +40,16 @@ public class CopyingInputStream extends InputStream {
 	return b;
     }
 
+    /**
+     * This method closes this and the provided {@link #inputStream}.
+     * 
+     * <b>Attention: </b> As this is an input stream which is wrapped around another
+     * input stream, this class is not responsible for the output stream. Therefore,
+     * the {@link #outputStream} is not closed by this method.
+     */
+    @Override
+    public void close() throws IOException {
+	inputStream.close();
+    }
+
 }

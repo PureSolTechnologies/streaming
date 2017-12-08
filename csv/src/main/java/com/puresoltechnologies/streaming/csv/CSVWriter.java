@@ -39,6 +39,14 @@ public class CSVWriter {
 	}
     }
 
+    public void writeSeparator() throws IOException {
+	outputStream.write(',');
+    }
+
+    public void writeEndOfLine() throws IOException {
+	outputStream.write('\n');
+    }
+
     public void write(boolean value) throws IOException {
 	writeValue(value ? "true" : "false");
     }

@@ -15,13 +15,4 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(CONSTRUCTOR)
 public @interface CSVCreator {
-
-    /**
-     * Defines the name of the field in the class and with that the getter and
-     * setter methods to use.
-     * 
-     * @return A {@link String} is returned containing the name.
-     */
-    String name();
-
 }

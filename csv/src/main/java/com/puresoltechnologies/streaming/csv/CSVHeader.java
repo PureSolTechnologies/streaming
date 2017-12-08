@@ -13,9 +13,9 @@ public class CSVHeader {
     private final int columnCount;
     private final List<String> columnNames = new ArrayList<>();
 
-    public CSVHeader(int columnCount, List<String> columnNames) {
+    public CSVHeader(List<String> columnNames) {
 	super();
-	this.columnCount = columnCount;
+	this.columnCount = columnNames.size();
 	this.columnNames.addAll(columnNames);
     }
 

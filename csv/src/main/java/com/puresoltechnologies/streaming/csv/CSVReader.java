@@ -34,7 +34,7 @@ public class CSVReader implements StreamIterator<CSVRecord> {
 
     public CSVReader(InputStream inputStream, Charset charset, boolean hasHeader) {
 	super();
-	streamIterator = new InputStreamIterator<InputStream, CSVRecord>(inputStream, new CSVRecordReader(charset));
+	streamIterator = new InputStreamIterator<>(inputStream, new CSVRecordReader(charset));
 	this.hasHeader = hasHeader;
 	header = readHeader();
     }
@@ -42,9 +42,9 @@ public class CSVReader implements StreamIterator<CSVRecord> {
     private CSVHeader readHeader() {
 	if (hasHeader && streamIterator.hasNext()) {
 	    CSVRecord record = streamIterator.next();
-	    return new CSVHeader(record.getFieldCount(), record.getFields());
+	    return new CSVHeader(record.getFields());
 	} else {
-	    return new CSVHeader(0, new ArrayList<>());
+	    return new CSVHeader(new ArrayList<>());
 	}
     }
 

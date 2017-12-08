@@ -10,7 +10,7 @@ public class GeneratingInputStreamTest {
 
     @Test
     public void testSeries() throws IOException {
-	try (GeneratingInputStream generatingInputStream = new GeneratingInputStream((lastValue) -> {
+	try (GeneratingInputStream generatingInputStream = new GeneratingInputStream((count, lastValue) -> {
 	    if (lastValue == null) {
 		return 0;
 	    }

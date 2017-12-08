@@ -44,4 +44,14 @@ public class CompositeInputStream extends InputStream {
 	return b;
     }
 
+    /**
+     * This method closes all provided {@link #inputStreams}.
+     */
+    @Override
+    public void close() throws IOException {
+	for (InputStream inputStream : inputStreams) {
+	    inputStream.close();
+	}
+    }
+
 }

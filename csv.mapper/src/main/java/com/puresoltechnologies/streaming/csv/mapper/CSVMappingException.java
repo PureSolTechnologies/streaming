@@ -5,14 +5,14 @@ package com.puresoltechnologies.streaming.csv.mapper;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class BinaryMappingException extends Exception {
+public class CSVMappingException extends Exception {
     private static final long serialVersionUID = 565774988834281448L;
 
-    public BinaryMappingException(String message, Throwable cause) {
+    public CSVMappingException(String message, Throwable cause) {
 	super(message, cause);
     }
 
-    public BinaryMappingException(String message) {
+    public CSVMappingException(String message) {
 	super(message);
     }
 

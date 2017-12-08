@@ -49,4 +49,13 @@ public class CopyingOutputStream extends OutputStream {
 	}
     }
 
+    /**
+     * This method closes all provided {@link #outputStreams}.
+     */
+    @Override
+    public void close() throws IOException {
+	for (OutputStream outputStream : outputStreams) {
+	    outputStream.close();
+	}
+    }
 }

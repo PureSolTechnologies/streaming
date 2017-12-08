@@ -1,19 +1,32 @@
 package com.puresoltechnologies.streaming.binary;
 
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * This class is an implementation of {@link Bytes} interface providing the
+ * {@link ByteOrder} independent functionality.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public abstract class AbstractBytes implements Bytes {
 
+    @Override
     public final byte[] empty() {
 	return new byte[0];
     }
 
     @Override
-    public final int putBytes(byte[] destination, int destinationOffset, byte[] source) {
+    public final int putBytes(byte[] destination, int destinationOffset, byte[] source)
+	    throws IllegalArgumentException {
+	if (destination.length - destinationOffset < source.length) {
+	    throw new IllegalArgumentException("The remaining " + (destination.length - destinationOffset)
+		    + " bytes in destination are too small for source size of " + source.length + " bytes.");
+	}
 	for (int i = 0; i < source.length; ++i) {
 	    destination[destinationOffset + i] = (source[i]);
 	}
@@ -216,9 +229,9 @@ public abstract class AbstractBytes implements Bytes {
     }
 
     @Override
-    public final byte[] fromInstant(Instant timestamp) {
-	long second = timestamp.getEpochSecond();
-	int nano = timestamp.getNano();
+    public final byte[] fromInstant(Instant instant) {
+	long second = instant.getEpochSecond();
+	int nano = instant.getNano();
 	byte[] bytes = new byte[12];
 	putLong(bytes, second, 0);
 	putInt(bytes, nano, 8);
@@ -226,9 +239,25 @@ public abstract class AbstractBytes implements Bytes {
     }
 
     @Override
+    public final int putInstant(byte[] bytes, Instant instant, int offset) {
+	long second = instant.getEpochSecond();
+	int nano = instant.getNano();
+	putLong(bytes, second, offset);
+	putInt(bytes, nano, offset + 8);
+	return 12;
+    }
+
+    @Override
     public final Instant toInstant(byte[] bytes) {
 	long seconds = toLong(bytes);
 	int nano = toInt(bytes, 8);
+	return Instant.ofEpochSecond(seconds, nano);
+    }
+
+    @Override
+    public final Instant toInstant(byte[] bytes, int offset) {
+	long seconds = toLong(bytes, offset);
+	int nano = toInt(bytes, offset + 8);
 	return Instant.ofEpochSecond(seconds, nano);
     }
 
@@ -245,10 +274,29 @@ public abstract class AbstractBytes implements Bytes {
     }
 
     @Override
+    public final int putLocalDate(byte[] bytes, LocalDate localDate, int offset) {
+	short year = (short) localDate.getYear();
+	putShort(bytes, year, offset);
+	byte month = (byte) localDate.getMonthValue();
+	putByte(bytes, month, offset + 2);
+	byte day = (byte) localDate.getDayOfMonth();
+	putByte(bytes, day, offset + 3);
+	return 4;
+    }
+
+    @Override
     public final LocalDate toLocalDate(byte[] bytes) {
 	short year = toShort(bytes, 0);
 	byte month = toByte(bytes, 2);
 	byte day = toByte(bytes, 3);
+	return LocalDate.of(year, month, day);
+    }
+
+    @Override
+    public final LocalDate toLocalDate(byte[] bytes, int offset) {
+	short year = toShort(bytes, offset);
+	byte month = toByte(bytes, offset + 2);
+	byte day = toByte(bytes, offset + 3);
 	return LocalDate.of(year, month, day);
     }
 
@@ -267,11 +315,33 @@ public abstract class AbstractBytes implements Bytes {
     }
 
     @Override
+    public final int putLocalTime(byte[] bytes, LocalTime localTime, int offset) {
+	byte hour = (byte) localTime.getHour();
+	putByte(bytes, hour, offset);
+	byte minute = (byte) localTime.getMinute();
+	putByte(bytes, minute, offset + 1);
+	byte second = (byte) localTime.getSecond();
+	putByte(bytes, second, offset + 2);
+	int nano = localTime.getNano();
+	putInt(bytes, nano, offset + 3);
+	return 7;
+    }
+
+    @Override
     public final LocalTime toLocalTime(byte[] bytes) {
 	byte hour = toByte(bytes, 0);
 	byte minute = toByte(bytes, 1);
 	byte second = toByte(bytes, 2);
 	int nano = toInt(bytes, 3);
+	return LocalTime.of(hour, minute, second, nano);
+    }
+
+    @Override
+    public final LocalTime toLocalTime(byte[] bytes, int offset) {
+	byte hour = toByte(bytes, offset);
+	byte minute = toByte(bytes, offset + 1);
+	byte second = toByte(bytes, offset + 2);
+	int nano = toInt(bytes, offset + 3);
 	return LocalTime.of(hour, minute, second, nano);
     }
 
@@ -296,6 +366,25 @@ public abstract class AbstractBytes implements Bytes {
     }
 
     @Override
+    public final int putLocalDateTime(byte[] bytes, LocalDateTime localDateTime, int offset) {
+	short year = (short) localDateTime.getYear();
+	putShort(bytes, year, offset);
+	byte month = (byte) localDateTime.getMonthValue();
+	putByte(bytes, month, offset + 2);
+	byte day = (byte) localDateTime.getDayOfMonth();
+	putByte(bytes, day, offset + 3);
+	byte hour = (byte) localDateTime.getHour();
+	putByte(bytes, hour, offset + 4);
+	byte minute = (byte) localDateTime.getMinute();
+	putByte(bytes, minute, offset + 5);
+	byte second = (byte) localDateTime.getSecond();
+	putByte(bytes, second, offset + 6);
+	int nano = localDateTime.getNano();
+	putInt(bytes, nano, offset + 7);
+	return 11;
+    }
+
+    @Override
     public final LocalDateTime toLocalDateTime(byte[] bytes) {
 	short year = toShort(bytes, 0);
 	byte month = toByte(bytes, 2);
@@ -308,23 +397,14 @@ public abstract class AbstractBytes implements Bytes {
     }
 
     @Override
-    public final Instant toTombstone(byte[] bytes) {
-	boolean isEmpty = true;
-	for (byte b : bytes) {
-	    if (b != 0) {
-		isEmpty = false;
-		break;
-	    }
-	}
-	if (isEmpty) {
-	    return null;
-	}
-	boolean isTombstone = false;
-	for (byte b : bytes) {
-	    if (b > 0) {
-		isTombstone = true;
-	    }
-	}
-	return isTombstone ? toInstant(bytes) : null;
+    public final LocalDateTime toLocalDateTime(byte[] bytes, int offset) {
+	short year = toShort(bytes, offset);
+	byte month = toByte(bytes, offset + 2);
+	byte day = toByte(bytes, offset + 3);
+	byte hour = toByte(bytes, offset + 4);
+	byte minute = toByte(bytes, offset + 5);
+	byte second = toByte(bytes, offset + 6);
+	int nano = toInt(bytes, offset + 7);
+	return LocalDateTime.of(year, month, day, hour, minute, second, nano);
     }
 }

@@ -82,7 +82,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>binary.mapper</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
 				<artifactId>csv</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>csv.mapper</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -329,6 +339,7 @@
 		<module>common.mapper</module>
 		<module>binary.mapper</module>
 		<module>csv.mapper</module>
+		<module>test</module>
 	</modules>
 
 </project>

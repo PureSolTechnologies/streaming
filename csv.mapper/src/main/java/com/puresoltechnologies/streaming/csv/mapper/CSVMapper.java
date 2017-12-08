@@ -47,14 +47,14 @@ public class CSVMapper extends AbstractMapper<CSVCreator> {
 	super(CSVCreator.class, elementAnnotations, Charset.defaultCharset());
     }
 
-    public <C> C read(CSVReader csvReader, Class<C> clazz) throws BinaryMappingException {
+    public <C> C read(CSVReader csvReader, Class<C> clazz) throws CSVMappingException {
 	try {
 	    MappingDefinition<C> definition = generateMappingDefinition(clazz);
 	    List<ElementDefinition<?>> elementDefinitions = definition.getElementDefinitionsOrdered();
 	    CSVRecord record = csvReader.next();
 	    int fieldCount = record.getFieldCount();
 	    if (fieldCount != elementDefinitions.size()) {
-		throw new BinaryMappingException(
+		throw new CSVMappingException(
 			"The number of elements int the class '" + clazz.getName() + "' (" + elementDefinitions.size()
 				+ ") do not match the number of columns in the current row (" + fieldCount + ").");
 	    }
@@ -70,7 +70,7 @@ public class CSVMapper extends AbstractMapper<CSVCreator> {
 	    return c;
 	} catch (MappingException | NoSuchMethodException | SecurityException | InstantiationException
 		| IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
-	    throw new BinaryMappingException("Could not read class " + clazz + " from binary input stream.", e);
+	    throw new CSVMappingException("Could not read class " + clazz + " from binary input stream.", e);
 	}
     }
 
@@ -96,19 +96,23 @@ public class CSVMapper extends AbstractMapper<CSVCreator> {
 	throw new IOException("Element annotation '" + type.getSimpleName() + "' is not supported.");
     }
 
-    public <C> void write(CSVWriter csvWriter, C object) throws BinaryMappingException, IOException {
+    public <C> void write(CSVWriter csvWriter, C object) throws CSVMappingException, IOException {
 	@SuppressWarnings("unchecked")
 	Class<C> clazz = (Class<C>) object.getClass();
 	try {
 	    MappingDefinition<C> definition = generateMappingDefinition(clazz);
 	    List<ElementDefinition<?>> elementDefinitions = definition.getElementDefinitionsOrdered();
 	    for (int i = 0; i < elementDefinitions.size(); i++) {
+		if (i > 0) {
+		    csvWriter.writeSeparator();
+		}
 		ElementDefinition<?> elementDefinition = elementDefinitions.get(i);
 		writeValue(csvWriter, elementDefinition.getAnnotation(), elementDefinition.getGetter().invoke(object));
 	    }
+	    csvWriter.writeEndOfLine();
 	} catch (MappingException | SecurityException | IllegalAccessException | IllegalArgumentException
 		| InvocationTargetException e) {
-	    throw new BinaryMappingException("Could not write class " + clazz + " to binary output stream.", e);
+	    throw new CSVMappingException("Could not write class " + clazz + " to binary output stream.", e);
 	}
     }
 

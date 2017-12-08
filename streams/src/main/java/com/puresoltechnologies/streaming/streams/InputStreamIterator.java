@@ -1,5 +1,7 @@
 package com.puresoltechnologies.streaming.streams;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
 
 import com.puresoltechnologies.streaming.AbstractStreamIterator;
@@ -13,7 +15,7 @@ import com.puresoltechnologies.streaming.AbstractStreamIterator;
  * @param <T>
  *            is the type of the iterators elements.
  */
-public class InputStreamIterator<I extends InputStream, T> extends AbstractStreamIterator<T> {
+public class InputStreamIterator<I extends InputStream, T> extends AbstractStreamIterator<T> implements Closeable {
 
     /**
      * This interface is used to a part reader on an input stream. This reader is
@@ -54,4 +56,11 @@ public class InputStreamIterator<I extends InputStream, T> extends AbstractStrea
 	return partReader.readPart(inputStream);
     }
 
+    /**
+     * This close method closes the provided {@link #inputStream}.
+     */
+    @Override
+    public void close() throws IOException {
+	inputStream.close();
+    }
 }
