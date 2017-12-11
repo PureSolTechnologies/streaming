@@ -32,9 +32,9 @@ public class CSVWriter {
 	for (int i = 0; i < columnCount; ++i) {
 	    writeValue(columnNames.get(i));
 	    if (i == columnCount - 1) {
-		writeValue("\n");
+		writeEndOfLine();
 	    } else {
-		writeValue(",");
+		writeSeparator();
 	    }
 	}
     }
@@ -44,6 +44,7 @@ public class CSVWriter {
     }
 
     public void writeEndOfLine() throws IOException {
+	outputStream.write('\r');
 	outputStream.write('\n');
     }
 

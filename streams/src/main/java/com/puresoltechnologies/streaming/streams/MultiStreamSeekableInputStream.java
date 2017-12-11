@@ -3,16 +3,14 @@ package com.puresoltechnologies.streaming.streams;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresoltechnologies.streaming.streams.SeekableInputStream.InputStreamCreator;
-
 public class MultiStreamSeekableInputStream extends InputStream {
 
-    private final InputStreamCreator supplier;
+    private final InputStreamCreator<?> supplier;
     private final SeekableInputStream[] streams;
     private int currentStream;
     private int openedStreams;
 
-    public MultiStreamSeekableInputStream(int streamNum, InputStreamCreator supplier) throws IOException {
+    public MultiStreamSeekableInputStream(int streamNum, InputStreamCreator<?> supplier) throws IOException {
 	super();
 	this.supplier = supplier;
 	this.streams = new SeekableInputStream[streamNum];

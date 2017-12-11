@@ -1,5 +1,6 @@
 package com.puresoltechnologies.streaming.streams;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,26 +8,23 @@ import java.io.InputStream;
 
 public class SeekableInputStream extends InputStream {
 
-    @FunctionalInterface
-    public static interface InputStreamCreator {
-
-	public CountingInputStream create() throws IOException;
-
-    }
-
-    private final InputStreamCreator supplier;
+    private final InputStreamCreator<?> supplier;
     private CountingInputStream inputStream = null;
 
     public SeekableInputStream(File file) throws IOException {
 	this(() -> {
-	    return new CountingInputStream(new FileInputStream(file));
+	    return new BufferedInputStream(new FileInputStream(file));
 	});
     }
 
-    public SeekableInputStream(InputStreamCreator supplier) throws IOException {
+    public SeekableInputStream(InputStreamCreator<?> supplier) throws IOException {
 	super();
 	this.supplier = supplier;
-	this.inputStream = supplier.create();
+	inputStream = createNewStream();
+    }
+
+    private CountingInputStream createNewStream() throws IOException {
+	return new CountingInputStream(supplier.create());
     }
 
     @Override
@@ -51,7 +49,7 @@ public class SeekableInputStream extends InputStream {
 	    return currentPosition + skipped;
 	} else if (currentPosition > position) {
 	    inputStream.close();
-	    inputStream = supplier.create();
+	    inputStream = createNewStream();
 	    return inputStream.skip(position);
 	} else {
 	    return getPosition();

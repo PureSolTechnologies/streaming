@@ -6,19 +6,12 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.streaming.streams.SeekableInputStream.InputStreamCreator;
-
 public class SeekableInputStreamTest {
 
-    private final static InputStreamCreator creator = new InputStreamCreator() {
-	@Override
-	public CountingInputStream create() throws IOException {
-	    GeneratingInputStream generatingInputStream = new GeneratingInputStream((count, i) -> {
-		return count < 1024 ? (int) (count % 255) : -1;
-	    });
-	    return new CountingInputStream(generatingInputStream);
-	}
-    };
+    private final static InputStreamCreator<GeneratingInputStream> creator = () -> //
+    new GeneratingInputStream((count, i) -> {
+	return count < 1024 ? (int) (count % 255) : -1;
+    });
 
     @Test
     public void testForwardSkip() throws IOException {
