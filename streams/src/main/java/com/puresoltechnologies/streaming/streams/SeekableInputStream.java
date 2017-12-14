@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SeekableInputStream extends InputStream {
+public class SeekableInputStream extends InputStream implements Comparable<SeekableInputStream> {
 
     private final InputStreamCreator<?> supplier;
     private CountingInputStream inputStream = null;
@@ -80,5 +80,41 @@ public class SeekableInputStream extends InputStream {
     @Override
     public void close() throws IOException {
 	inputStream.close();
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((inputStream == null) ? 0 : inputStream.hashCode());
+	result = prime * result + ((supplier == null) ? 0 : supplier.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	SeekableInputStream other = (SeekableInputStream) obj;
+	if (inputStream == null) {
+	    if (other.inputStream != null)
+		return false;
+	} else if (!inputStream.equals(other.inputStream))
+	    return false;
+	if (supplier == null) {
+	    if (other.supplier != null)
+		return false;
+	} else if (!supplier.equals(other.supplier))
+	    return false;
+	return true;
+    }
+
+    @Override
+    public int compareTo(SeekableInputStream o) {
+	return Long.compare(getPosition(), o.getPosition());
     }
 }

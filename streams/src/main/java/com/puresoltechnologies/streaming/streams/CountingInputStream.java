@@ -10,7 +10,7 @@ import java.io.InputStream;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class CountingInputStream extends InputStream {
+public class CountingInputStream extends InputStream implements Comparable<CountingInputStream> {
 
     private final InputStream inputStream;
     private long count = 0;
@@ -29,6 +29,24 @@ public class CountingInputStream extends InputStream {
 	return read;
     }
 
+    @Override
+    public int read(byte[] b) throws IOException {
+	int number = inputStream.read(b);
+	if (number != -1) {
+	    count += number;
+	}
+	return number;
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+	int number = inputStream.read(b, off, len);
+	if (number != -1) {
+	    count += number;
+	}
+	return number;
+    }
+
     public final long getCount() {
 	return count;
     }
@@ -38,4 +56,36 @@ public class CountingInputStream extends InputStream {
 	inputStream.close();
     }
 
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + (int) (count ^ (count >>> 32));
+	result = prime * result + ((inputStream == null) ? 0 : inputStream.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	CountingInputStream other = (CountingInputStream) obj;
+	if (count != other.count)
+	    return false;
+	if (inputStream == null) {
+	    if (other.inputStream != null)
+		return false;
+	} else if (!inputStream.equals(other.inputStream))
+	    return false;
+	return true;
+    }
+
+    @Override
+    public int compareTo(CountingInputStream o) {
+	return Long.compare(count, o.count);
+    }
 }

@@ -4,7 +4,7 @@ package com.puresoltechnologies.streaming;
  * This class calculates the statistics of a provided series of dates on the
  * fly.
  * 
- * @see https://en.wikipedia.org/wiki/Standard_deviation#Rapid_calculation_methods
+ * https://en.wikipedia.org/wiki/Standard_deviation#Rapid_calculation_methods
  * 
  * @author Rick-Rainer Ludwig
  */
