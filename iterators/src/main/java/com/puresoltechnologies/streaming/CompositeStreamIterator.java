@@ -20,6 +20,7 @@ public class CompositeStreamIterator<T> extends AbstractStreamIterator<T> {
     private final List<Iterator<T>> iterators = new ArrayList<>();
     private Iterator<T> currentIterator = null;
 
+    @SafeVarargs
     public CompositeStreamIterator(Iterator<T>... iterators) {
 	Objects.requireNonNull(iterators, "Iterators must not be null");
 	for (Iterator<T> iterator : iterators) {

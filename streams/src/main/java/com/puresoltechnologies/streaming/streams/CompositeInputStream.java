@@ -49,6 +49,9 @@ public class CompositeInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
+	if (currentInputStream != null) {
+	    currentInputStream.close();
+	}
 	for (InputStream inputStream : inputStreams) {
 	    inputStream.close();
 	}

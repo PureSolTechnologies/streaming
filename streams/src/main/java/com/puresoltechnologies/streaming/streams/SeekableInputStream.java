@@ -1,23 +1,15 @@
 package com.puresoltechnologies.streaming.streams;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SeekableInputStream extends InputStream implements Comparable<SeekableInputStream> {
+public class SeekableInputStream<S extends InputStream> extends InputStream
+	implements Comparable<SeekableInputStream<S>> {
 
     private final InputStreamCreator<?> supplier;
     private CountingInputStream inputStream = null;
 
-    public SeekableInputStream(File file) throws IOException {
-	this(() -> {
-	    return new BufferedInputStream(new FileInputStream(file));
-	});
-    }
-
-    public SeekableInputStream(InputStreamCreator<?> supplier) throws IOException {
+    public SeekableInputStream(InputStreamCreator<S> supplier) throws IOException {
 	super();
 	this.supplier = supplier;
 	inputStream = createNewStream();
@@ -30,6 +22,29 @@ public class SeekableInputStream extends InputStream implements Comparable<Seeka
     @Override
     public int read() throws IOException {
 	return inputStream.read();
+    }
+
+    @Override
+    public int read(byte[] b) throws IOException {
+	return inputStream.read(b);
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+	return inputStream.read(b, off, len);
+    }
+
+    public long getCount() {
+	return inputStream.getCount();
+    }
+
+    @Override
+    public int available() throws IOException {
+	return inputStream.available();
+    }
+
+    public int compareTo(CountingInputStream o) {
+	return inputStream.compareTo(o);
     }
 
     /**
@@ -66,8 +81,9 @@ public class SeekableInputStream extends InputStream implements Comparable<Seeka
 	    if (newPosition < 0) {
 		newPosition = 0;
 	    }
-	    seek(newPosition);
-	    return newPosition - lastPosition;
+	    inputStream.close();
+	    inputStream = createNewStream();
+	    return inputStream.skip(newPosition) - lastPosition;
 	} else {
 	    return 0;
 	}
@@ -99,7 +115,7 @@ public class SeekableInputStream extends InputStream implements Comparable<Seeka
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	SeekableInputStream other = (SeekableInputStream) obj;
+	SeekableInputStream<?> other = (SeekableInputStream<?>) obj;
 	if (inputStream == null) {
 	    if (other.inputStream != null)
 		return false;
@@ -114,7 +130,7 @@ public class SeekableInputStream extends InputStream implements Comparable<Seeka
     }
 
     @Override
-    public int compareTo(SeekableInputStream o) {
+    public int compareTo(SeekableInputStream<S> o) {
 	return Long.compare(getPosition(), o.getPosition());
     }
 }

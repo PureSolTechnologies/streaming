@@ -2,6 +2,15 @@ package com.puresoltechnologies.streaming;
 
 import java.util.NoSuchElementException;
 
+/**
+ * This iterator is used to calculate the {@link RunningStatistics} when
+ * iterating.
+ * 
+ * @author Rick-Rainer Ludwig
+ *
+ * @param <T>
+ *            is the actual number type.
+ */
 public class StatisticsIterator<T extends Number & Comparable<T>> implements StreamIterator<T> {
 
     private final StreamIterator<T> iterator;

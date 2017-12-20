@@ -12,9 +12,9 @@ import java.io.OutputStream;
  * @author Rick-Rainer Ludwig
  *
  */
-public class CopyingInputStream extends InputStream {
+public class CopyingInputStream extends DelegatingInputStream {
 
-    private final InputStream inputStream;
+    private static final int MAX_SKIP_BUFFER_SIZE = 2048;
     private final OutputStream outputStream;
 
     /**
@@ -26,30 +26,79 @@ public class CopyingInputStream extends InputStream {
      *            is the output stream to copy every byte read from input stream to.
      */
     public CopyingInputStream(InputStream inputStream, OutputStream outputStream) {
-	super();
-	this.inputStream = inputStream;
+	super(inputStream);
 	this.outputStream = outputStream;
     }
 
     @Override
     public int read() throws IOException {
-	int b = inputStream.read();
+	int b = super.read();
 	if (b != -1) {
 	    outputStream.write(b);
 	}
 	return b;
     }
 
-    /**
-     * This method closes this and the provided {@link #inputStream}.
-     * 
-     * <b>Attention: </b> As this is an input stream which is wrapped around another
-     * input stream, this class is not responsible for the output stream. Therefore,
-     * the {@link #outputStream} is not closed by this method.
-     */
     @Override
-    public void close() throws IOException {
-	inputStream.close();
+    public int read(byte[] buffer) throws IOException {
+	int b = super.read(buffer);
+	if (b != -1) {
+	    outputStream.write(buffer, 0, b);
+	}
+	return b;
+    }
+
+    @Override
+    public int read(byte[] buffer, int off, int len) throws IOException {
+	int b = super.read(buffer, off, len);
+	if (b != -1) {
+	    outputStream.write(buffer, off, b);
+	}
+	return b;
+    }
+
+    @Override
+    public long skip(long n) throws IOException {
+	if (n <= 0) {
+	    return 0;
+	}
+	long remaining = n;
+	int bufferSize = (int) Math.min(MAX_SKIP_BUFFER_SIZE, remaining);
+	byte[] skipBuffer = new byte[bufferSize];
+	while (remaining > 0) {
+	    int nr = super.read(skipBuffer, 0, (int) Math.min(bufferSize, remaining));
+	    if (nr < 0) {
+		break;
+	    }
+	    outputStream.write(skipBuffer, 0, nr);
+	    remaining -= nr;
+	}
+	return n - remaining;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime * result + ((outputStream == null) ? 0 : outputStream.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (!super.equals(obj))
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	CopyingInputStream other = (CopyingInputStream) obj;
+	if (outputStream == null) {
+	    if (other.outputStream != null)
+		return false;
+	} else if (!outputStream.equals(other.outputStream))
+	    return false;
+	return true;
     }
 
 }

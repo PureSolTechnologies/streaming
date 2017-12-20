@@ -45,7 +45,7 @@ public class RandomReadPerformanceTest {
     private static OutputStream csvOutputFile = null;
     private static CSVWriter csvWriter = null;
 
-    private static InputStreamCreator<?> creator;
+    private static InputStreamCreator<InputStream> creator;
 
     @Parameters
     public static Collection<Object[]> data() throws IOException {
@@ -57,7 +57,7 @@ public class RandomReadPerformanceTest {
 	}
 	try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(TEST_FILE))) {
 	    for (int i = 0; i < FILE_SIZE; ++i) {
-		outputStream.write(i % 0xFF);
+		outputStream.write(i % 256);
 	    }
 	}
 	List<Object[]> list = new ArrayList<>();
@@ -113,13 +113,13 @@ public class RandomReadPerformanceTest {
 	RunningStatistics<Double> throughputStatistics = new RunningStatistics<>();
 	for (int run = 0; run < NUMBER_OF_RUNS; ++run) {
 	    long startTime = System.nanoTime();
-	    try (MultiStreamSeekableInputStream fileInputStream = new MultiStreamSeekableInputStream(streamCount,
-		    creator)) {
+	    try (MultiStreamSeekableInputStream<InputStream> fileInputStream = new MultiStreamSeekableInputStream<>(
+		    streamCount, creator)) {
 		for (int i = 0; i < accessCount; ++i) {
 		    int pos = random.nextInt((int) FILE_SIZE);
 		    fileInputStream.seek(pos);
 		    int b = fileInputStream.read();
-		    assertEquals(pos % 255, b);
+		    assertEquals(pos % 256, b);
 		}
 	    }
 	    long stopTime = System.nanoTime();

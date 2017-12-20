@@ -3,20 +3,21 @@ package com.puresoltechnologies.streaming.streams;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MultiStreamSeekableInputStream extends InputStream {
+public class MultiStreamSeekableInputStream<S extends InputStream> extends InputStream {
 
-    private final InputStreamCreator<?> supplier;
-    private final SeekableInputStream[] streams;
+    private final InputStreamCreator<S> supplier;
+    private final SeekableInputStream<S>[] streams;
     private int currentStream;
     private int openedStreams;
 
-    public MultiStreamSeekableInputStream(int streamNum, InputStreamCreator<?> supplier) throws IOException {
+    @SuppressWarnings("unchecked")
+    public MultiStreamSeekableInputStream(int streamNum, InputStreamCreator<S> supplier) throws IOException {
 	super();
 	this.supplier = supplier;
-	this.streams = new SeekableInputStream[streamNum];
+	this.streams = (SeekableInputStream<S>[]) new SeekableInputStream<?>[streamNum];
 	currentStream = 0;
 	openedStreams = 1;
-	streams[currentStream] = new SeekableInputStream(supplier);
+	streams[currentStream] = new SeekableInputStream<>(supplier);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class MultiStreamSeekableInputStream extends InputStream {
     @Override
     public void close() throws IOException {
 	for (int i = 0; i < openedStreams; ++i) {
-	    SeekableInputStream stream = streams[i];
+	    SeekableInputStream<S> stream = streams[i];
 	    stream.close();
 	    streams[i] = null;
 	}
@@ -45,7 +46,7 @@ public class MultiStreamSeekableInputStream extends InputStream {
      * @throws IOException
      */
     public final long seek(long position) throws IOException {
-	SeekableInputStream inputStream = streams[currentStream];
+	SeekableInputStream<S> inputStream = streams[currentStream];
 	if (inputStream.getPosition() == position) {
 	    return position;
 	}
@@ -55,7 +56,7 @@ public class MultiStreamSeekableInputStream extends InputStream {
 	long foundPos = -1;
 
 	for (int id = 0; id < openedStreams; ++id) {
-	    SeekableInputStream stream = streams[id];
+	    SeekableInputStream<S> stream = streams[id];
 	    long streamPosition = stream.getPosition();
 	    if (streamPosition == position) {
 		currentStream = id;
@@ -77,12 +78,12 @@ public class MultiStreamSeekableInputStream extends InputStream {
 	    currentStream = foundId;
 	} else if (openedStreams < streams.length) {
 	    currentStream = openedStreams;
-	    streams[currentStream] = new SeekableInputStream(supplier);
+	    streams[currentStream] = new SeekableInputStream<>(supplier);
 	    openedStreams++;
 	} else {
 	    currentStream = maxId;
 	    streams[currentStream].close();
-	    streams[currentStream] = new SeekableInputStream(supplier);
+	    streams[currentStream] = new SeekableInputStream<>(supplier);
 	}
 	return streams[currentStream].seek(position);
     }

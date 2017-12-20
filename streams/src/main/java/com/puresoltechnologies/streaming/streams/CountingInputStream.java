@@ -10,19 +10,17 @@ import java.io.InputStream;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class CountingInputStream extends InputStream implements Comparable<CountingInputStream> {
+public class CountingInputStream extends DelegatingInputStream implements Comparable<CountingInputStream> {
 
-    private final InputStream inputStream;
     private long count = 0;
 
     public CountingInputStream(InputStream inputStream) {
-	super();
-	this.inputStream = inputStream;
+	super(inputStream);
     }
 
     @Override
     public int read() throws IOException {
-	int read = inputStream.read();
+	int read = super.read();
 	if (read != -1) {
 	    count++;
 	}
@@ -31,7 +29,7 @@ public class CountingInputStream extends InputStream implements Comparable<Count
 
     @Override
     public int read(byte[] b) throws IOException {
-	int number = inputStream.read(b);
+	int number = super.read(b);
 	if (number != -1) {
 	    count += number;
 	}
@@ -40,7 +38,7 @@ public class CountingInputStream extends InputStream implements Comparable<Count
 
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-	int number = inputStream.read(b, off, len);
+	int number = super.read(b, off, len);
 	if (number != -1) {
 	    count += number;
 	}
@@ -51,17 +49,27 @@ public class CountingInputStream extends InputStream implements Comparable<Count
 	return count;
     }
 
+    public final long seek(long count) throws IOException {
+	if (this.count > count) {
+	    throw new IOException("The offset was already passed.");
+	}
+	long skipped = super.skip(count - this.count);
+	this.count += skipped;
+	return skipped;
+    }
+
     @Override
-    public void close() throws IOException {
-	inputStream.close();
+    public long skip(long n) throws IOException {
+	long skipped = super.skip(n);
+	count += skipped;
+	return skipped;
     }
 
     @Override
     public int hashCode() {
 	final int prime = 31;
-	int result = 1;
+	int result = super.hashCode();
 	result = prime * result + (int) (count ^ (count >>> 32));
-	result = prime * result + ((inputStream == null) ? 0 : inputStream.hashCode());
 	return result;
     }
 
@@ -69,17 +77,12 @@ public class CountingInputStream extends InputStream implements Comparable<Count
     public boolean equals(Object obj) {
 	if (this == obj)
 	    return true;
-	if (obj == null)
+	if (!super.equals(obj))
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
 	CountingInputStream other = (CountingInputStream) obj;
 	if (count != other.count)
-	    return false;
-	if (inputStream == null) {
-	    if (other.inputStream != null)
-		return false;
-	} else if (!inputStream.equals(other.inputStream))
 	    return false;
 	return true;
     }

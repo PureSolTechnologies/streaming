@@ -19,7 +19,8 @@ import java.util.NoSuchElementException;
 public interface StreamIterator<T> extends Iterator<T> {
 
     /**
-     * Converts an {@link Iterator} into a {@link StreamIterator}.
+     * Converts an {@link Iterator} into a {@link StreamIterator}. The result is an
+     * iterator without any <code>null</code> elements.
      * 
      * @param iterator
      *            is the iterator to be converter.

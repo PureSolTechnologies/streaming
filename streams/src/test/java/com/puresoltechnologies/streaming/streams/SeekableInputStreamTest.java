@@ -15,7 +15,7 @@ public class SeekableInputStreamTest {
 
     @Test
     public void testForwardSkip() throws IOException {
-	try (SeekableInputStream seekableInputStream = new SeekableInputStream(creator)) {
+	try (SeekableInputStream<GeneratingInputStream> seekableInputStream = new SeekableInputStream<>(creator)) {
 	    assertEquals(0l, seekableInputStream.getPosition());
 	    assertEquals(0l, seekableInputStream.read());
 	    assertEquals(0l, seekableInputStream.skip(0));
@@ -32,7 +32,7 @@ public class SeekableInputStreamTest {
 
     @Test
     public void testBackwardSkip() throws IOException {
-	try (SeekableInputStream seekableInputStream = new SeekableInputStream(creator)) {
+	try (SeekableInputStream<GeneratingInputStream> seekableInputStream = new SeekableInputStream<>(creator)) {
 	    assertEquals(1024l, seekableInputStream.seek(1024));
 	    assertEquals(1024l, seekableInputStream.getPosition());
 	    assertEquals(-1l, seekableInputStream.skip(-1l));

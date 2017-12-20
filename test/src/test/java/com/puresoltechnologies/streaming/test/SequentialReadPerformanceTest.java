@@ -65,15 +65,14 @@ public class SequentialReadPerformanceTest {
 		    }
 		} //
 	});
-	for (int size : new int[] { 1, 2, 4, 8, 12, 16, 24, 32, 40, 48, 56, 64, 128, 256 }) {
-	    int blockSize = size * 1024;
+	for (int bufferSize : new int[] { 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536 }) {
 	    list.add(new Object[] { //
 		    BufferedInputStream.class, //
-		    size, //
+		    bufferSize, //
 		    new InputStreamCreator<BufferedInputStream>() {
 			@Override
 			public BufferedInputStream create() throws IOException {
-			    return new BufferedInputStream(new FileInputStream(TEST_FILE), blockSize);
+			    return new BufferedInputStream(new FileInputStream(TEST_FILE), bufferSize);
 			}
 		    } //
 	    });
@@ -131,7 +130,7 @@ public class SequentialReadPerformanceTest {
 	    double throughput = FILE_SIZE / milliseconds / 1000.0;
 	    timeStatistics.add(milliseconds);
 	    throughputStatistics.add(throughput);
-	    System.out.println(clazz.getSimpleName() + " with buffer of " + size + "kB: " + milliseconds + "ms / "
+	    System.out.println(clazz.getSimpleName() + " with buffer of " + size + "  bytes: " + milliseconds + "ms / "
 		    + throughput + "MB/s");
 	}
 	SequentialReadResult result = new SequentialReadResult(clazz.getName(), size, timeStatistics.getMin(),
