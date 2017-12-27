@@ -7,15 +7,15 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-public class CountingInputStreamTest {
+public class PositionInputStreamTest {
 
     @Test
     public void testCountingSingleByte() throws IOException {
 	GeneratingInputStream generatingInputStream = new GeneratingInputStream((count, i) -> {
 	    return count < 1024 ? (int) (count % 0xFF) : -1;
 	});
-	try (CountingInputStream countingInputStream = new CountingInputStream(generatingInputStream)) {
-	    InputStreamIterator<CountingInputStream, Integer> iterator = new InputStreamIterator<>(countingInputStream,
+	try (PositionInputStream countingInputStream = new PositionInputStream(generatingInputStream)) {
+	    InputStreamIterator<PositionInputStream, Integer> iterator = new InputStreamIterator<>(countingInputStream,
 		    (stream) -> {
 			try {
 			    int i = stream.read();
@@ -28,7 +28,7 @@ public class CountingInputStreamTest {
 			}
 		    });
 	    int count = 0;
-	    assertEquals(count, countingInputStream.getCount());
+	    assertEquals(count, countingInputStream.getPosition());
 	    for (Integer i : new Iterable<Integer>() {
 		@Override
 		public Iterator<Integer> iterator() {
@@ -36,10 +36,10 @@ public class CountingInputStreamTest {
 		}
 	    }) {
 		count++;
-		assertEquals(count, countingInputStream.getCount());
+		assertEquals(count, countingInputStream.getPosition());
 		assertEquals((count - 1) % 255, i.intValue());
 	    }
-	    assertEquals(1024l, countingInputStream.getCount());
+	    assertEquals(1024l, countingInputStream.getPosition());
 	}
     }
 
@@ -48,9 +48,9 @@ public class CountingInputStreamTest {
 	GeneratingInputStream generatingInputStream = new GeneratingInputStream((count, i) -> {
 	    return count < 1024 ? (int) (count % 0xFF) : -1;
 	});
-	try (CountingInputStream countingInputStream = new CountingInputStream(generatingInputStream)) {
+	try (PositionInputStream countingInputStream = new PositionInputStream(generatingInputStream)) {
 	    int count = 0;
-	    assertEquals(count, countingInputStream.getCount());
+	    assertEquals(count, countingInputStream.getPosition());
 
 	    byte[] bytes = new byte[128];
 	    int number = countingInputStream.read(bytes);
@@ -60,10 +60,10 @@ public class CountingInputStreamTest {
 		    count++;
 		    assertEquals((count - 1) % 255, b & 0xFF);
 		}
-		assertEquals(count, countingInputStream.getCount());
+		assertEquals(count, countingInputStream.getPosition());
 		number = countingInputStream.read(bytes);
 	    }
-	    assertEquals(1024l, countingInputStream.getCount());
+	    assertEquals(1024l, countingInputStream.getPosition());
 	}
     }
 
@@ -72,9 +72,9 @@ public class CountingInputStreamTest {
 	GeneratingInputStream generatingInputStream = new GeneratingInputStream((count, i) -> {
 	    return count < 1024 ? (int) (count % 0xFF) : -1;
 	});
-	try (CountingInputStream countingInputStream = new CountingInputStream(generatingInputStream)) {
+	try (PositionInputStream countingInputStream = new PositionInputStream(generatingInputStream)) {
 	    int count = 0;
-	    assertEquals(count, countingInputStream.getCount());
+	    assertEquals(count, countingInputStream.getPosition());
 
 	    byte[] bytes = new byte[1024];
 	    int number = countingInputStream.read(bytes, 24, 128);
@@ -84,10 +84,10 @@ public class CountingInputStreamTest {
 		    count++;
 		    assertEquals((count - 1) % 255, b & 0xFF);
 		}
-		assertEquals(count, countingInputStream.getCount());
+		assertEquals(count, countingInputStream.getPosition());
 		number = countingInputStream.read(bytes, 24, 128);
 	    }
-	    assertEquals(1024l, countingInputStream.getCount());
+	    assertEquals(1024l, countingInputStream.getPosition());
 	}
     }
 

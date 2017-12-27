@@ -7,7 +7,7 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
 	implements Comparable<SeekableInputStream<S>> {
 
     private final InputStreamCreator<?> supplier;
-    private CountingInputStream inputStream = null;
+    private PositionInputStream inputStream = null;
 
     public SeekableInputStream(InputStreamCreator<S> supplier) throws IOException {
 	super();
@@ -15,8 +15,8 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
 	inputStream = createNewStream();
     }
 
-    private CountingInputStream createNewStream() throws IOException {
-	return new CountingInputStream(supplier.create());
+    private PositionInputStream createNewStream() throws IOException {
+	return new PositionInputStream(supplier.create());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
     }
 
     public long getCount() {
-	return inputStream.getCount();
+	return inputStream.getPosition();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
 	return inputStream.available();
     }
 
-    public int compareTo(CountingInputStream o) {
+    public int compareTo(PositionInputStream o) {
 	return inputStream.compareTo(o);
     }
 
@@ -58,7 +58,7 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
      * @throws IOException
      */
     public final long seek(long position) throws IOException {
-	long currentPosition = inputStream.getCount();
+	long currentPosition = inputStream.getPosition();
 	if (currentPosition < position) {
 	    long skipped = inputStream.skip(position - currentPosition);
 	    return currentPosition + skipped;
@@ -76,7 +76,7 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
 	if (n > 0) {
 	    return inputStream.skip(n);
 	} else if (n < 0) {
-	    long lastPosition = inputStream.getCount();
+	    long lastPosition = inputStream.getPosition();
 	    long newPosition = lastPosition + n;
 	    if (newPosition < 0) {
 		newPosition = 0;
@@ -90,7 +90,7 @@ public class SeekableInputStream<S extends InputStream> extends InputStream
     }
 
     public final long getPosition() {
-	return inputStream.getCount();
+	return inputStream.getPosition();
     }
 
     @Override
