@@ -9,25 +9,22 @@ import java.io.InputStream;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class PositionInputStream extends InputStream implements Comparable<PositionInputStream> {
+public class PositionInputStream extends DelegatingInputStream implements Comparable<PositionInputStream> {
 
     private long position = 0;
-    private final InputStream inputStream;
 
     public PositionInputStream(InputStream inputStream) {
-	super();
-	this.inputStream = inputStream;
+	super(inputStream);
     }
 
     public PositionInputStream(InputStream inputStream, long positionOffset) {
-	super();
-	this.inputStream = inputStream;
+	super(inputStream);
 	this.position = positionOffset;
     }
 
     @Override
     public int read() throws IOException {
-	int read = inputStream.read();
+	int read = super.read();
 	if (read != -1) {
 	    position++;
 	}
@@ -36,7 +33,7 @@ public class PositionInputStream extends InputStream implements Comparable<Posit
 
     @Override
     public int read(byte[] b) throws IOException {
-	int number = inputStream.read(b);
+	int number = super.read(b);
 	if (number != -1) {
 	    position += number;
 	}
@@ -45,7 +42,7 @@ public class PositionInputStream extends InputStream implements Comparable<Posit
 
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-	int number = inputStream.read(b, off, len);
+	int number = super.read(b, off, len);
 	if (number != -1) {
 	    position += number;
 	}
@@ -60,14 +57,14 @@ public class PositionInputStream extends InputStream implements Comparable<Posit
 	if (this.position > position) {
 	    throw new IOException("The offset was already passed.");
 	}
-	long skipped = inputStream.skip(position - this.position);
+	long skipped = super.skip(position - this.position);
 	this.position += skipped;
 	return skipped;
     }
 
     @Override
     public long skip(long n) throws IOException {
-	long skipped = inputStream.skip(n);
+	long skipped = super.skip(n);
 	position += skipped;
 	return skipped;
     }
@@ -80,9 +77,8 @@ public class PositionInputStream extends InputStream implements Comparable<Posit
     @Override
     public int hashCode() {
 	final int prime = 31;
-	int result = 1;
+	int result = super.hashCode();
 	result = prime * result + (int) (position ^ (position >>> 32));
-	result = prime * result + ((inputStream == null) ? 0 : inputStream.hashCode());
 	return result;
     }
 
@@ -90,18 +86,14 @@ public class PositionInputStream extends InputStream implements Comparable<Posit
     public boolean equals(Object obj) {
 	if (this == obj)
 	    return true;
-	if (obj == null)
+	if (!super.equals(obj))
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
 	PositionInputStream other = (PositionInputStream) obj;
 	if (position != other.position)
 	    return false;
-	if (inputStream == null) {
-	    if (other.inputStream != null)
-		return false;
-	} else if (!inputStream.equals(other.inputStream))
-	    return false;
 	return true;
     }
+
 }
