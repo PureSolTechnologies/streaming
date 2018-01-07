@@ -192,6 +192,7 @@
 				<executions>
 					<execution>
 						<id>bundle</id>
+						<phase>package</phase>
 						<goals>
 							<goal>bundle</goal>
 						</goals>
