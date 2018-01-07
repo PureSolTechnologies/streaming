@@ -117,6 +117,30 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>[3.5.0,)</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>[1.8,)</version>
+								</requireJavaVersion>
+								<banDuplicatePomDependencyVersions />
+								<dependencyConvergence />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>1.2.1</version>
@@ -316,6 +340,11 @@
 		</extensions>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
