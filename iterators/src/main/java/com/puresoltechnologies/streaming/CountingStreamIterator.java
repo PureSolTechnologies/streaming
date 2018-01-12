@@ -13,11 +13,25 @@ import java.util.NoSuchElementException;
  */
 public class CountingStreamIterator<T> implements StreamIterator<T> {
 
+    /**
+     * This method
+     * 
+     * @param streamIterator
+     * @return
+     */
+    public static <V, I extends Iterator<V>> CountingStreamIterator<V> of(I streamIterator) {
+	return new CountingStreamIterator<>(streamIterator);
+    }
+
     private final StreamIterator<T> origin;
     private long count = 0;
 
     public CountingStreamIterator(Iterator<T> origin) {
 	this.origin = StreamIterator.of(origin);
+    }
+
+    public CountingStreamIterator(StreamIterator<T> origin) {
+	this.origin = origin;
     }
 
     /**
