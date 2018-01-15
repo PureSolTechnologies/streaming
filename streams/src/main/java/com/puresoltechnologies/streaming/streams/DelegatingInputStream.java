@@ -109,16 +109,6 @@ public class DelegatingInputStream extends InputStream {
     }
 
     @Override
-    public int hashCode() {
-	return inputStream.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	return inputStream.equals(obj);
-    }
-
-    @Override
     public String toString() {
 	return inputStream.toString();
     }
