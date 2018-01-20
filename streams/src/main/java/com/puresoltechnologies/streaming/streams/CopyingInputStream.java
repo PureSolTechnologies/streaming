@@ -77,6 +77,13 @@ public class CopyingInputStream extends DelegatingInputStream {
     }
 
     @Override
+    public void close() throws IOException {
+	super.close();
+	outputStream.flush();
+	outputStream.close();
+    }
+
+    @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = super.hashCode();

@@ -36,6 +36,6 @@ public interface CloseableStreamIterable<T> extends StreamIterable<T>, AutoClose
     }
 
     @Override
-    public StreamIterator<T> iterator();
+    public CloseableStreamIterator<T> iterator();
 
 }
