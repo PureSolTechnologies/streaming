@@ -16,6 +16,17 @@ import java.util.NoSuchElementException;
 public interface CloseableStreamIterator<T> extends StreamIterator<T>, AutoCloseable {
 
     /**
+     * This method creates an empty closable stream iterator. This is sometimes
+     * needed in case a <code>null</code> is to be avoided and an empty result is to
+     * be provided.
+     * 
+     * @return An empty {@link CloseableStreamIterator} is returned.
+     */
+    public static <T> CloseableStreamIterator<T> empty() {
+	return CloseableStreamIterator.of(StreamIterator.empty());
+    }
+
+    /**
      * Converts an {@link Iterator} into a {@link CloseableStreamIterator} by
      * utilizing {@link StreamIterator#of(Iterator)}. The result is an iterator
      * without any <code>null</code> elements which also supports the close which is

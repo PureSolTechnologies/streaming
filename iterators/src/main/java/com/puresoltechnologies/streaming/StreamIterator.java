@@ -19,6 +19,22 @@ import java.util.NoSuchElementException;
 public interface StreamIterator<T> extends Iterator<T> {
 
     /**
+     * This method creates an empty stream iterator. This is sometimes needed in
+     * case a <code>null</code> is to be avoided and an empty result is to be
+     * provided.
+     * 
+     * @return An empty {@link StreamIterator} is returned.
+     */
+    public static <T> StreamIterator<T> empty() {
+	return new AbstractStreamIterator<T>() {
+	    @Override
+	    protected T findNext() {
+		return null;
+	    }
+	};
+    }
+
+    /**
      * Converts an {@link Iterator} into a {@link StreamIterator}. The result is an
      * iterator without any <code>null</code> elements.
      * 
