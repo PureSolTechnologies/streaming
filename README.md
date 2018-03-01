@@ -6,7 +6,7 @@ Library for streaming extensions.
 
 __General information about the project can be found at:__
 
-http://opensource.puresol-technologies.com/streaming
+http://opensource.puresol-technologies.com/projects/?p=streaming
     
 __Please, use the issue tracker at:__
 
