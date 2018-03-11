@@ -17,6 +17,15 @@ import java.util.Objects;
  */
 public class CompositeStreamIterator<T> extends AbstractStreamIterator<T> {
 
+    @SafeVarargs
+    public static <T> CompositeStreamIterator<T> of(Iterator<T>... iterators) {
+	return new CompositeStreamIterator<>(iterators);
+    }
+
+    public static <T> CompositeStreamIterator<T> of(Collection<? extends Iterator<T>> iterators) {
+	return new CompositeStreamIterator<>(iterators);
+    }
+
     private final List<Iterator<T>> iterators = new ArrayList<>();
     private Iterator<T> currentIterator = null;
 
