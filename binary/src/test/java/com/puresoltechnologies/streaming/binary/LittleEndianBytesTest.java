@@ -1,7 +1,7 @@
 package com.puresoltechnologies.streaming.binary;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.nio.ByteOrder;
 import java.time.Instant;
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LittleEndianBytesTest extends AbstractBytesTest {
 
@@ -159,14 +159,14 @@ public class LittleEndianBytesTest extends AbstractBytesTest {
     public void testFloat() {
 	float b = (float) 1.23456e4;
 	byte[] bytes = littleEndianBytes.fromFloat(b);
-	assertEquals(b, littleEndianBytes.toFloat(bytes), 0.0);
+	assertEquals(b, littleEndianBytes.toFloat(bytes), 1e-6);
     }
 
     @Test
     public void testDouble() {
 	double b = 1.23456e4;
 	byte[] bytes = littleEndianBytes.fromDouble(b);
-	assertEquals(b, littleEndianBytes.toDouble(bytes), 0.0);
+	assertEquals(b, littleEndianBytes.toDouble(bytes), 1e-6);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class LittleEndianBytesTest extends AbstractBytesTest {
 	assertEquals(0, bytes[5]);
 	assertEquals(0xF0, bytes[6] & 0xFF);
 	assertEquals(0x3F, bytes[7] & 0xFF);
-	assertEquals(b, littleEndianBytes.toDouble(bytes), 0.0);
+	assertEquals(b, littleEndianBytes.toDouble(bytes), 1e-6);
     }
 
     @Test

@@ -1,13 +1,11 @@
 package com.puresoltechnologies.streaming.binary;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.nio.charset.Charset;
 
-import org.junit.Test;
-
-import com.puresoltechnologies.streaming.binary.Bytes;
+import org.junit.jupiter.api.Test;
 
 public abstract class AbstractBytesTest {
 
