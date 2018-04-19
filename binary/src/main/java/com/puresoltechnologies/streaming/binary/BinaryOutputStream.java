@@ -204,7 +204,7 @@ public class BinaryOutputStream extends OutputStream {
      *             is thrown in case of I/O issues.
      */
     protected void writeNulTerminatedString(ByteBuffer bytes) throws IOException {
-	write(bytes.array());
+	write(bytes.array(), bytes.arrayOffset(), bytes.limit());
 	write(0);
     }
 
