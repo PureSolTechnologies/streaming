@@ -4,7 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresoltechnologies.streaming.AbstractStreamIterator;
+import com.puresoltechnologies.streaming.iterators.AbstractStreamIterator;
 
 /**
  * This is a special stream iterator which takes in a simple {@link InputStream}

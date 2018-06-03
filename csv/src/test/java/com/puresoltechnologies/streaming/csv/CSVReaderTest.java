@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
-import com.puresoltechnologies.streaming.CountingStreamIterator;
+import com.puresoltechnologies.streaming.iterators.CountingStreamIterator;
 
 public class CSVReaderTest {
 

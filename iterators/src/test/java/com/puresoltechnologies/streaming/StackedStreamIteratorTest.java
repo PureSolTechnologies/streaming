@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.puresoltechnologies.streaming.iterators.ConvertingStreamIterator;
+import com.puresoltechnologies.streaming.iterators.StackedStreamIterator;
+
 public class StackedStreamIteratorTest {
 
     @Test

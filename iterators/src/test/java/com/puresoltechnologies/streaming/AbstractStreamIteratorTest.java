@@ -10,6 +10,9 @@ import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
+import com.puresoltechnologies.streaming.iterators.AbstractStreamIterator;
+import com.puresoltechnologies.streaming.iterators.StreamIterator;
+
 public class AbstractStreamIteratorTest {
 
     @Rule

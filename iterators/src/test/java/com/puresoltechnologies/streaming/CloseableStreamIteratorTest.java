@@ -13,6 +13,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.puresoltechnologies.streaming.iterators.CloseableStreamIterator;
+import com.puresoltechnologies.streaming.iterators.StreamIterator;
+
 public class CloseableStreamIteratorTest {
 
     @Test

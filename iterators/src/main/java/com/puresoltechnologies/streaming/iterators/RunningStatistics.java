@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming;
+package com.puresoltechnologies.streaming.iterators;
 
 /**
  * This class calculates the statistics of a provided series of dates on the

@@ -23,11 +23,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.puresoltechnologies.streaming.RunningStatistics;
 import com.puresoltechnologies.streaming.csv.CSVHeader;
 import com.puresoltechnologies.streaming.csv.CSVWriter;
 import com.puresoltechnologies.streaming.csv.mapper.CSVMapper;
 import com.puresoltechnologies.streaming.csv.mapper.CSVMappingException;
+import com.puresoltechnologies.streaming.iterators.RunningStatistics;
 import com.puresoltechnologies.streaming.streams.InputStreamCreator;
 
 @RunWith(Parameterized.class)

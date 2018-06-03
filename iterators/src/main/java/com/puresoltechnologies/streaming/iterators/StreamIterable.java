@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming;
+package com.puresoltechnologies.streaming.iterators;
 
 /**
  * This interface is used as special {@link Iterable} for

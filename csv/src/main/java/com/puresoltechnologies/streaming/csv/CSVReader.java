@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import com.puresoltechnologies.streaming.StreamIterator;
+import com.puresoltechnologies.streaming.iterators.StreamIterator;
 import com.puresoltechnologies.streaming.streams.InputStreamIterator;
 
 /**

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming;
+package com.puresoltechnologies.streaming.iterators;
 
 import java.util.Iterator;
 import java.util.Objects;

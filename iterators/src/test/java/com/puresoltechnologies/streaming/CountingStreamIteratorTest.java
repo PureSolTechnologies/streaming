@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.puresoltechnologies.streaming.iterators.CountingStreamIterator;
+
 public class CountingStreamIteratorTest {
 
     @Test

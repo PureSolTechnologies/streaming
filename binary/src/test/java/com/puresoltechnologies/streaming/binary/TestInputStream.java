@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.puresoltechnologies.streaming.StreamIterator;
+import com.puresoltechnologies.streaming.iterators.StreamIterator;
 
 public class TestInputStream extends InputStream {
 
