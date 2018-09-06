@@ -18,10 +18,9 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import com.puresoltechnologies.streaming.csv.CSVHeader;
 import com.puresoltechnologies.streaming.csv.CSVWriter;
@@ -43,16 +42,7 @@ public class SequentialReadPerformanceTest {
     private static OutputStream csvOutputFile = null;
     private static CSVWriter csvWriter = null;
 
-    @Parameters
     public static Collection<Object[]> data() throws IOException {
-	if (!TEST_DIRECTORY.exists()) {
-	    assertTrue("Could not create directory for test file.", TEST_DIRECTORY.mkdirs());
-	}
-	try (OutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(TEST_FILE))) {
-	    for (int i = 0; i < FILE_SIZE; i++) {
-		fileOutputStream.write(i % 0xFF);
-	    }
-	}
 
 	List<Object[]> list = new ArrayList<>();
 	list.add(new Object[] { //
@@ -82,6 +72,15 @@ public class SequentialReadPerformanceTest {
 
     @BeforeClass
     public static void createFile() throws IOException {
+	if (!TEST_DIRECTORY.exists()) {
+	    assertTrue("Could not create directory for test file.", TEST_DIRECTORY.mkdirs());
+	}
+	try (OutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(TEST_FILE))) {
+	    for (int i = 0; i < FILE_SIZE; i++) {
+		fileOutputStream.write(i % 0xFF);
+	    }
+	}
+
 	System.out.println("================================");
 	System.out.println("Sequential Read Performance Test");
 	System.out.println("================================");
