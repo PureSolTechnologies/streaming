@@ -40,6 +40,7 @@ public abstract class AbstractMapper<T extends Annotation> implements Mapper {
 	MappingDefinition<C> definition = (MappingDefinition<C>) definitions.get(clazz);
 	if (definition == null) {
 	    definition = createDefinition(clazz);
+	    definitions.put(clazz, definition);
 	}
 	return definition;
     }
