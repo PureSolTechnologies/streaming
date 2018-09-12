@@ -30,7 +30,7 @@ public class CSVWriter {
 	int columnCount = header.getColumnCount();
 	List<String> columnNames = header.getColumnNames();
 	for (int i = 0; i < columnCount; ++i) {
-	    writeValue(columnNames.get(i));
+	    write(columnNames.get(i));
 	    if (i == columnCount - 1) {
 		writeEndOfLine();
 	    } else {
