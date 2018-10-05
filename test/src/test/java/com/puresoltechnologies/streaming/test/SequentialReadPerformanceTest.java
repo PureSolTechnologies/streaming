@@ -18,9 +18,10 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.puresoltechnologies.streaming.csv.CSVHeader;
 import com.puresoltechnologies.streaming.csv.CSVWriter;
@@ -42,7 +43,8 @@ public class SequentialReadPerformanceTest {
     private static OutputStream csvOutputFile = null;
     private static CSVWriter csvWriter = null;
 
-    public static Collection<Object[]> data() throws IOException {
+    @Parameters
+    public static Collection<Object[]> parameters() throws IOException {
 
 	List<Object[]> list = new ArrayList<>();
 	list.add(new Object[] { //
