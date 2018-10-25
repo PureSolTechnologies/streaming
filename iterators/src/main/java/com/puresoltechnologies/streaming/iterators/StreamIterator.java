@@ -2,6 +2,10 @@ package com.puresoltechnologies.streaming.iterators;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * This is the interface for a iterator over a stream. It extends the
@@ -13,8 +17,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Rick-Rainer Ludwig
  *
- * @param <T>
- *            is the element type of the iterator.
+ * @param <T> is the element type of the iterator.
  */
 public interface StreamIterator<T> extends Iterator<T> {
 
@@ -38,8 +41,7 @@ public interface StreamIterator<T> extends Iterator<T> {
      * Converts an {@link Iterator} into a {@link StreamIterator}. The result is an
      * iterator without any <code>null</code> elements.
      * 
-     * @param iterator
-     *            is the iterator to be converter.
+     * @param iterator is the iterator to be converter.
      * @return A {@link StreamIterator} object is return containing all
      *         non-<code>null</code> elements in same order.
      */
@@ -62,8 +64,8 @@ public interface StreamIterator<T> extends Iterator<T> {
      * This method overwrites {@link Iterator#next()} with a one change: The
      * resulting element is never <code>null</code>.
      * 
-     * @throws NoSuchElementException
-     *             is thrown in case the stream has reached its end.
+     * @throws NoSuchElementException is thrown in case the stream has reached its
+     *                                end.
      * @return An object of generic type T is returned. If the stream has reached
      *         its end, a {@link NoSuchElementException} is thrown.
      *         {@link #hasNext()} will returned <code>false</code> in this case and
@@ -77,8 +79,8 @@ public interface StreamIterator<T> extends Iterator<T> {
      * This method returns the next element which will be returned by next(),
      * without moving forward.
      * 
-     * @throws NoSuchElementException
-     *             is thrown in case the stream has reached its end.
+     * @throws NoSuchElementException is thrown in case the stream has reached its
+     *                                end.
      * @return An object of generic type T is returned. If the stream has reached
      *         its end, a {@link NoSuchElementException} is thrown.
      *         {@link #hasNext()} will returned <code>false</code> in this case and
@@ -86,5 +88,15 @@ public interface StreamIterator<T> extends Iterator<T> {
      *         result is never <code>null</code>.
      */
     T peek() throws NoSuchElementException;
+
+    default Spliterator<T> spliterator() {
+	return Spliterators.spliteratorUnknownSize(this, Spliterator.NONNULL);
+    }
+
+    default Stream<T> stream() {
+	Spliterator<T> spliterator = Spliterators.spliteratorUnknownSize(this, Spliterator.NONNULL);
+	Stream<T> targetStream = StreamSupport.stream(spliterator, false);
+	return targetStream;
+    }
 
 }

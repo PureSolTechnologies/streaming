@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,20 @@ public class StreamIteratorTest {
 	assertTrue(streamIterator.hasNext());
 	assertEquals(2, (int) streamIterator.next());
 	assertFalse(streamIterator.hasNext());
+    }
+
+    @Test
+    public void testSpliterator() {
+	Iterator<Integer> iterator = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9).iterator();
+	StreamIterator<Integer> streamIterator = StreamIterator.of(iterator);
+	assertNotNull(streamIterator.spliterator());
+    }
+
+    @Test
+    public void testSteamForEach() {
+	Iterator<Integer> iterator = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9).iterator();
+	StreamIterator<Integer> streamIterator = StreamIterator.of(iterator);
+	assertEquals(9, streamIterator.stream().count());
     }
 
 }
