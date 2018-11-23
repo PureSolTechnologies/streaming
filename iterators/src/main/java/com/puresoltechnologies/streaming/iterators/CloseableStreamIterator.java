@@ -1,5 +1,6 @@
 package com.puresoltechnologies.streaming.iterators;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -10,8 +11,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Rick-Rainer Ludwig
  *
- * @param <T>
- *            the element types of the iterator.
+ * @param <T> the element types of the iterator.
  */
 public interface CloseableStreamIterator<T> extends StreamIterator<T>, AutoCloseable {
 
@@ -32,13 +32,10 @@ public interface CloseableStreamIterator<T> extends StreamIterator<T>, AutoClose
      * without any <code>null</code> elements which also supports the close which is
      * needed.
      * 
-     * @param iterator
-     *            is the iterator to be converter.
-     * @param <T>
-     *            is the element type of the iterator.
-     * @param <I>
-     *            is the iterator of with element type T and additional
-     *            {@link AutoCloseable} interface.
+     * @param iterator is the iterator to be converter.
+     * @param          <T> is the element type of the iterator.
+     * @param          <I> is the iterator of with element type T and additional
+     *                 {@link AutoCloseable} interface.
      * @return A {@link StreamIterator} object is return containing all
      *         non-<code>null</code> elements in same order.
      * 
@@ -78,13 +75,53 @@ public interface CloseableStreamIterator<T> extends StreamIterator<T>, AutoClose
      * without any <code>null</code> elements which also supports the close which is
      * needed.
      * 
-     * @param iterator
-     *            is the iterator to be converter.
-     * @param <T>
-     *            is the element type of the iterator.
-     * @param <I>
-     *            is the iterator of with element type T and additional
-     *            {@link AutoCloseable} interface.
+     * @param iterator is the iterator to be converter.
+     * @param          <T> is the element type of the iterator.
+     * @param          <I> is the iterator of with element type T and additional
+     *                 {@link AutoCloseable} interface.
+     * @return A {@link StreamIterator} object is return containing all
+     *         non-<code>null</code> elements in same order.
+     * 
+     */
+    public static <T, I extends Iterator<T>> CloseableStreamIterator<T> of(I iterator,
+	    Collection<AutoCloseable> autoCloseables) {
+	StreamIterator<T> streamIterator = StreamIterator.of(iterator);
+	return new CloseableStreamIterator<T>() {
+
+	    @Override
+	    public T next() throws NoSuchElementException {
+		return streamIterator.next();
+	    }
+
+	    @Override
+	    public T peek() throws NoSuchElementException {
+		return streamIterator.peek();
+	    }
+
+	    @Override
+	    public boolean hasNext() {
+		return streamIterator.hasNext();
+	    }
+
+	    @Override
+	    public void close() throws Exception {
+		for (AutoCloseable autoCloseable : autoCloseables) {
+		    autoCloseable.close();
+		}
+	    }
+	};
+    }
+
+    /**
+     * Converts an {@link Iterator} into a {@link CloseableStreamIterator} by
+     * utilizing {@link StreamIterator#of(Iterator)}. The result is an iterator
+     * without any <code>null</code> elements which also supports the close which is
+     * needed.
+     * 
+     * @param iterator is the iterator to be converter.
+     * @param          <T> is the element type of the iterator.
+     * @param          <I> is the iterator of with element type T and additional
+     *                 {@link AutoCloseable} interface.
      * @return A {@link StreamIterator} object is return containing all
      *         non-<code>null</code> elements in same order.
      * 

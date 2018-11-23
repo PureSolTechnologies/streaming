@@ -26,7 +26,7 @@ public class CloseableStreamIteratorTest {
     }
 
     @Test
-    public void testOf() throws Exception {
+    public void testOfArray() throws Exception {
 	List<Integer> original = new ArrayList<>();
 	original.add(null);
 	original.add(0);
@@ -39,6 +39,37 @@ public class CloseableStreamIteratorTest {
 	StreamIterator<Integer> streamIterator = StreamIterator.of(original.iterator());
 	CloseableStreamIterator<Integer> closeableStreamIterator = CloseableStreamIterator.of(streamIterator,
 		autoCloseable);
+
+	assertTrue(streamIterator.hasNext());
+	assertEquals(0, (int) streamIterator.next());
+	assertTrue(streamIterator.hasNext());
+	assertEquals(1, (int) streamIterator.next());
+	assertTrue(streamIterator.hasNext());
+	assertEquals(2, (int) streamIterator.next());
+	assertFalse(streamIterator.hasNext());
+
+	closeableStreamIterator.close();
+
+	Mockito.verify(autoCloseable, times(1)).close();
+
+    }
+
+    @Test
+    public void testOfCollection() throws Exception {
+	List<Integer> original = new ArrayList<>();
+	original.add(null);
+	original.add(0);
+	original.add(1);
+	original.add(null);
+	original.add(null);
+	original.add(2);
+	original.add(null);
+	AutoCloseable autoCloseable = mock(AutoCloseable.class);
+	List<AutoCloseable> autoCloseableList = new ArrayList<>();
+	autoCloseableList.add(autoCloseable);
+	StreamIterator<Integer> streamIterator = StreamIterator.of(original.iterator());
+	CloseableStreamIterator<Integer> closeableStreamIterator = CloseableStreamIterator.of(streamIterator,
+		autoCloseableList);
 
 	assertTrue(streamIterator.hasNext());
 	assertEquals(0, (int) streamIterator.next());
