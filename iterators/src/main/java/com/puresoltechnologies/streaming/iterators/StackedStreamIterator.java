@@ -10,18 +10,16 @@ import java.util.function.Function;
  * 
  * @author Rick-Rainer Ludwig
  *
- * @param <T>
- *            is the original type of the base iterator.
- * @param <F>
- *            is the type of this iterator.
+ * @param <T> is the original type of the base iterator.
+ * @param <F> is the type of this iterator.
  */
 public class StackedStreamIterator<T, F> extends AbstractStreamIterator<F> {
 
     private final Iterator<T> origin;
-    private final Function<T, Iterator<F>> creator;
+    private final Function<T, ? extends Iterator<F>> creator;
     private Iterator<F> currentIterator = null;
 
-    public StackedStreamIterator(Iterator<T> origin, Function<T, Iterator<F>> creator) {
+    public StackedStreamIterator(Iterator<T> origin, Function<T, ? extends Iterator<F>> creator) {
 	Objects.requireNonNull(origin, "Origin iterator must not be null");
 	Objects.requireNonNull(creator, "Creator must not be null");
 	this.origin = origin;

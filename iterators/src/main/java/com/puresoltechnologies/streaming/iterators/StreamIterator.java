@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -89,14 +91,59 @@ public interface StreamIterator<T> extends Iterator<T> {
      */
     T peek() throws NoSuchElementException;
 
+    /**
+     * This method provides a {@link Spliterator} for this {@link StreamIterator}.
+     * The Spliterator has an unknown size and is guaranteed to have non-null
+     * values.
+     * 
+     * @return A {@link Spliterator} is returned.
+     */
     default Spliterator<T> spliterator() {
 	return Spliterators.spliteratorUnknownSize(this, Spliterator.NONNULL);
     }
 
+    /**
+     * This method creates a {@link Stream} based on this {@link StreamIterator}.
+     * The stream has an unknown size and non-null values.
+     * 
+     * @return A {@link Stream} is returned.
+     */
     default Stream<T> stream() {
-	Spliterator<T> spliterator = Spliterators.spliteratorUnknownSize(this, Spliterator.NONNULL);
-	Stream<T> targetStream = StreamSupport.stream(spliterator, false);
-	return targetStream;
+	return StreamSupport.stream(spliterator(), false);
+    }
+
+    /**
+     * This method maps the elements of this {@link StreamIterator} to elements of a
+     * new type.
+     * 
+     * @param mapper is the {@link Function} to convert the elements into new type.
+     * @return A new {@link StreamIterator} is returned.
+     */
+    default <R> StreamIterator<R> map(Function<T, R> mapper) {
+	return new ConvertingStreamIterator<>(this, mapper);
+    }
+
+    /**
+     * This method maps the elements of this {@link StreamIterator} to more elements
+     * of another type.
+     * 
+     * @param mapper is the {@link Function} to convert the elements into new
+     *               elements.
+     * @return A new {@link StreamIterator} is returned.
+     */
+    default <R> StreamIterator<R> flatMap(Function<T, ? extends Iterator<R>> mapper) {
+	return new StackedStreamIterator<>(this, mapper);
+    }
+
+    /**
+     * This method filters the elements of this {@link StreamIterator}.
+     * 
+     * @param filter is the {@link Predicate} to signal the elements to be filtered
+     *               out.
+     * @return A new {@link StreamIterator} is returned.
+     */
+    default StreamIterator<T> filter(Predicate<T> filter) {
+	return new FilteringStreamIterator<>(this, filter);
     }
 
 }
