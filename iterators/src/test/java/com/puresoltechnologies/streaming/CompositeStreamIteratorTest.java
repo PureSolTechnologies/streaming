@@ -19,7 +19,6 @@ public class CompositeStreamIteratorTest {
 	List<Integer> numbers = Arrays.asList(1, 2);
 	List<Integer> numbers2 = Arrays.asList(3);
 	List<Integer> numbers3 = Arrays.asList(4, 5);
-	@SuppressWarnings("unchecked")
 	CompositeStreamIterator<Integer> converterIterator = new CompositeStreamIterator<Integer>(numbers.iterator(),
 		numbers2.iterator(), numbers3.iterator());
 	assertTrue(converterIterator.hasNext());
@@ -37,7 +36,6 @@ public class CompositeStreamIteratorTest {
 
     @Test
     public void testEmptyConstructor() {
-	@SuppressWarnings("unchecked")
 	CompositeStreamIterator<Integer> converterIterator = new CompositeStreamIterator<Integer>();
 	assertFalse(converterIterator.hasNext());
     }
@@ -46,7 +44,6 @@ public class CompositeStreamIteratorTest {
     public void testEmptyIterators() {
 	List<Integer> numbers = new ArrayList<Integer>();
 	List<Integer> numbers2 = new ArrayList<Integer>();
-	@SuppressWarnings("unchecked")
 	CompositeStreamIterator<Integer> converterIterator = new CompositeStreamIterator<Integer>(numbers.iterator(),
 		numbers2.iterator());
 	assertFalse(converterIterator.hasNext());
