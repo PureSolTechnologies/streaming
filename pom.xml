@@ -38,6 +38,7 @@
 		<module>iterators</module>
 		<module>binary</module>
 		<module>csv</module>
+		<module>tsv</module>
 		<module>common.mapper</module>
 		<module>binary.mapper</module>
 		<module>csv.mapper</module>

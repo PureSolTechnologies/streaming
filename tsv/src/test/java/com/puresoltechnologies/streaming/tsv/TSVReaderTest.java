@@ -1,4 +1,4 @@
-package com.puresoltechnologies.streaming.csv;
+package com.puresoltechnologies.streaming.tsv;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,16 +9,16 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.streaming.iterators.CountingStreamIterator;
 
-public class CSVReaderTest {
+public class TSVReaderTest {
 
     @Test
     public void test() throws IOException {
-	try (InputStream inputStream = CSVReaderTest.class.getResourceAsStream("test.csv")) {
-	    CSVReader reader = new CSVReader(inputStream, true);
-	    CSVHeader header = reader.getHeader();
-	    assertEquals(6, header.getColumnCount());
+	try (InputStream inputStream = TSVReaderTest.class.getResourceAsStream("test.tsv")) {
+	    TSVReader reader = new TSVReader(inputStream, true);
+	    TSVHeader header = reader.getHeader();
 	    System.out.println(header);
-	    CountingStreamIterator<CSVRecord> countingStreamIterator = new CountingStreamIterator<>(reader);
+	    assertEquals(6, header.getColumnCount());
+	    CountingStreamIterator<TSVRecord> countingStreamIterator = new CountingStreamIterator<>(reader);
 	    countingStreamIterator.forEachRemaining(
 		    (record) -> System.out.println(countingStreamIterator.getCount() + ": " + record));
 	}
